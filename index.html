@@ -1320,6 +1320,8 @@ footer {
 .ai-prompts::-webkit-scrollbar { display: none; }
 .ai-prompts button { flex-shrink: 0; min-height: 40px; padding: 8px 12px; border: 1px solid #ddd; border-radius: 22px; background: white; font-size: 12px; cursor: pointer; }
 .ai-prompts button:hover { border-color: #222; }
+.ai-prompts .ai-surprise { display: inline-flex; align-items: center; gap: 6px; border-color: #ffc5d0; }
+.ai-surprise svg { width: 16px; height: 16px; color: #ff385c; flex-shrink: 0; }
 .ai-composer { display: flex; gap: 10px; padding: 14px 20px; border-top: 1px solid #eee; flex-shrink: 0; }
 .ai-composer input { min-width: 0; flex: 1; border: 1px solid #ddd; border-radius: 25px; padding: 12px 16px; outline: none; }
 .ai-composer input:focus { border-color: #222; }
@@ -3656,7 +3658,7 @@ function openConcierge() {
       <div class="ai-trip-result" id="aiTripResult" aria-live="polite" tabindex="0">${conciergeTripHTML}</div>
     </div>
     <div class="ai-messages" id="aiMessages" role="log" aria-live="polite" aria-relevant="additions" aria-label="Travel conversation"></div>
-    <div class="ai-prompts" aria-label="Suggested questions">${conciergePrompts.map((text,i)=>`<button onclick="askConcierge(conciergePrompts[${i}])">${text}</button>`).join("")}</div>
+    <div class="ai-prompts" aria-label="Suggested questions"><button class="ai-surprise" onclick="surpriseConcierge()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="m12 3 2.5 6.5L21 12l-6.5 2.5L12 21l-2.5-6.5L3 12l6.5-2.5L12 3Z"/><path d="M20 2v4m-2-2h4"/></svg>Surprise me</button>${conciergePrompts.map((text,i)=>`<button onclick="askConcierge(conciergePrompts[${i}])">${text}</button>`).join("")}</div>
     <form class="ai-composer" onsubmit="event.preventDefault();askConcierge()">
       <input id="aiInput" aria-label="Ask a travel question" placeholder="Ask about stays, activities or a trip…" maxlength="500" autocomplete="off" />
       <button class="ai-send" aria-label="Send question" type="submit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 19V5m-6 6 6-6 6 6"/></svg></button>
@@ -3746,6 +3748,28 @@ function appendConciergeMessage(message) {
   node.innerHTML = `${message.user ? "" : '<div class="ai-message-label">CONCIERGE</div>'}<p>${conciergeEscape(message.text)}</p>${message.items?.length ? `<div class="ai-recommendations">${message.items.map(conciergeCard).join("")}</div>` : ""}`;
   target.append(node);
   target.scrollTop = target.scrollHeight;
+}
+
+function surpriseConcierge() {
+  if(!$("#aiMessages")) return;
+  const pick = items=>items[Math.floor(Math.random()*items.length)];
+  const cityOf = item=>item.location.includes("Goa") ? "Goa" : item.location;
+  const destinations = [...new Set(homes.map(cityOf))].filter(city=>experiences.some(item=>cityOf(item)===city));
+  const destination = pick(destinations);
+  const home = pick(homes.filter(item=>cityOf(item)===destination));
+  const experience = pick(experiences.filter(item=>cityOf(item)===destination));
+  const localServices = services.filter(item=>cityOf(item)===destination);
+  const service = localServices.length && Math.random() < 0.5 ? pick(localServices) : null;
+  const cost = home.price*2 + experience.price*2 + (service ? service.price : 0);
+  const question = {user:true,text:"Surprise me"};
+  const reply = {
+    text:`Weekend escape to ${destination}\n\nStay: ${home.name}\nExperience: ${experience.title}${service ? `\nService: ${service.title}` : ""}\n\nEstimated trip cost: ₹${money(cost)}\nFor 2 travellers: 2 nights + 1 experience each${service ? " + 1 service session" : ""}. Mock estimate; excludes transport, meals and fees.`,
+    items:[home,experience,service].filter(Boolean)
+  };
+  conciergeMessages.push(question,reply);
+  if(conciergeMessages.length > 20) conciergeMessages.splice(0,2);
+  appendConciergeMessage(question);
+  appendConciergeMessage(reply);
 }
 
 function askConcierge(prompt) {
