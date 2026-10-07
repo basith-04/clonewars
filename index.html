@@ -1289,6 +1289,51 @@ footer {
     transition: none !important;
   }
 }
+
+/* Local travel concierge */
+.ai-launcher { position: fixed; right: 24px; bottom: 24px; z-index: 70; display: flex; align-items: center; gap: 9px; min-height: 52px; padding: 0 18px; border: 1px solid #eee; border-radius: 28px; background: white; box-shadow: 0 4px 18px #0002; font-weight: 600; cursor: pointer; }
+.ai-launcher svg, .ai-avatar svg { width: 24px; height: 24px; }
+.ai-launcher svg { color: var(--accent); }
+.ai-launcher:hover { border-color: #ff385c; }
+.modal.ai-sheet { width: min(520px,100%); height: min(720px,90dvh); display: flex; flex-direction: column; overflow: hidden; }
+.ai-sheet .modal-head { flex-shrink: 0; gap: 10px; height: 72px; }
+.ai-sheet .modal-head strong { margin: 0; transform: none; }
+.ai-heading { flex: 1; min-width: 0; }
+.ai-heading small { display: block; color: #6a6a6a; font-size: 11px; margin-top: 4px; }
+.ai-avatar { display: grid; place-items: center; width: 40px; height: 40px; flex-shrink: 0; border-radius: 50%; color: #ff385c; background: #fff1f3; }
+.ai-messages { flex: 1; min-height: 0; padding: 20px; overflow-y: auto; overscroll-behavior: contain; }
+.ai-message { margin-bottom: 20px; min-width: 0; }
+.ai-message p { margin: 0 0 12px; line-height: 21px; white-space: pre-line; overflow-wrap: anywhere; }
+.ai-message-user { display: flex; justify-content: flex-end; }
+.ai-message-user p { max-width: 90%; padding: 11px 15px; border-radius: 18px 18px 4px 18px; background: #f2f2f2; margin: 0; }
+.ai-message-label { font-size: 11px; color: #6a6a6a; font-weight: 600; margin-bottom: 7px; }
+.ai-recommendations { display: grid; gap: 8px; }
+.ai-recommendation { width: 100%; display: flex; align-items: center; gap: 12px; text-align: left; padding: 8px; border: 1px solid #eee; border-radius: 14px; background: white; cursor: pointer; min-width: 0; }
+.ai-recommendation:hover { border-color: #aaa; background: #fafafa; }
+.ai-recommendation img { width: 70px; height: 70px; object-fit: cover; border-radius: 10px; flex-shrink: 0; }
+.ai-recommendation-copy { min-width: 0; flex: 1; }
+.ai-recommendation strong { display: block; font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ai-recommendation small { display: block; font-size: 12px; color: #6a6a6a; line-height: 18px; }
+.ai-recommendation .ai-price { color: #222; }
+.ai-recommendation > span:last-child { font-size: 22px; padding-right: 4px; }
+.ai-prompts { display: flex; gap: 7px; overflow-x: auto; scrollbar-width: none; padding: 0 20px 12px; flex-shrink: 0; overscroll-behavior-x: contain; }
+.ai-prompts::-webkit-scrollbar { display: none; }
+.ai-prompts button { flex-shrink: 0; min-height: 40px; padding: 8px 12px; border: 1px solid #ddd; border-radius: 22px; background: white; font-size: 12px; cursor: pointer; }
+.ai-prompts button:hover { border-color: #222; }
+.ai-composer { display: flex; gap: 10px; padding: 14px 20px; border-top: 1px solid #eee; flex-shrink: 0; }
+.ai-composer input { min-width: 0; flex: 1; border: 1px solid #ddd; border-radius: 25px; padding: 12px 16px; outline: none; }
+.ai-composer input:focus { border-color: #222; }
+.ai-send { width: 46px; height: 46px; flex-shrink: 0; display: grid; place-items: center; border: 0; border-radius: 50%; background: #ff385c; color: white; cursor: pointer; }
+.ai-send svg { width: 20px; height: 20px; }
+@media (max-width: 767px) {
+  .ai-launcher { right: 16px; bottom: calc(80px + env(safe-area-inset-bottom)); min-height: 48px; padding: 0 14px; font-size: 12px; }
+  .modal.ai-sheet { width: 100%; height: 94dvh; max-height: 94dvh; }
+  .ai-messages { padding: 18px 16px; }
+  .ai-prompts { padding-left: 16px; padding-right: 16px; }
+  .ai-composer { padding: 12px 16px max(16px,env(safe-area-inset-bottom)); }
+  .ai-composer input { font-size: 16px; }
+}
+
 </style>
 </head>
 
@@ -1552,6 +1597,10 @@ footer {
   <button onclick="openWishlist()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z"/></svg>Wishlists</button>
   <button onclick="openLogin()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="8" r="4"/><path d="M4 21c.8-4.2 3.5-6.5 8-6.5s7.2 2.3 8 6.5"/></svg>Log in</button>
 </nav>
+<button class="ai-launcher" onclick="openConcierge()" aria-label="Open AI travel concierge" aria-haspopup="dialog">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="m12 3 2.5 6.5L21 12l-6.5 2.5L12 21l-2.5-6.5L3 12l6.5-2.5L12 3Z"/><path d="M20 2v4m-2-2h4"/></svg>
+  <span>Ask AI</span>
+</button>
 <div id="modalRoot"></div>
 <div id="toastRoot"></div>
 
@@ -2727,6 +2776,8 @@ function findItem(id) {
 
 function openDetail(id) {
 
+  conciergeProperty = id;
+
   const item = findItem(id);
 
   if(!item) return;
@@ -3434,6 +3485,120 @@ window.addEventListener("scroll",()=>{
   else
     compact.classList.remove("show");
 });
+
+
+/* =========================================================
+   AI CONCIERGE — predefined local recommendations only
+========================================================= */
+const conciergePrompts = [
+  "Find a stay under ₹8,000",
+  "Best stay for 6 people",
+  "Plan a 2 day Goa trip",
+  "What can I do in Goa?"
+];
+const conciergeMessages = [];
+let conciergeProperty = null;
+
+function conciergeEscape(value) {
+  return String(value).replace(/[&<>"']/g, char => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[char]));
+}
+
+function conciergeCard(item) {
+  const detail = item.category === "homes"
+    ? `${item.location} · ${item.guests} guests · ${item.bedrooms} bedrooms`
+    : `${item.location} · ${item.duration || item.serviceType}`;
+  const unit = item.category === "homes" ? "/ night" : item.category === "experiences" ? "/ guest" : "/ session";
+  return `<button class="ai-recommendation" onclick="openDetail('${item.id}')" aria-label="View ${conciergeEscape(item.title)}">
+    <img src="${item.image}" alt="" loading="lazy" />
+    <span class="ai-recommendation-copy"><strong>${conciergeEscape(item.title)}</strong><small>${conciergeEscape(detail)}</small><small class="ai-price">₹${money(item.price)} ${unit} · ★ ${item.rating}</small></span>
+    <span aria-hidden="true">›</span>
+  </button>`;
+}
+
+function openConcierge() {
+  showModal(`<div class="modal ai-sheet">
+    <div class="modal-head">
+      <span class="ai-avatar" aria-hidden="true">${$(".ai-launcher svg").outerHTML}</span>
+      <div class="ai-heading"><strong>AI travel concierge</strong><small>Local demo · recommendations from our collection</small></div>
+      <button class="modal-close" onclick="closeModal()" aria-label="Close concierge">×</button>
+    </div>
+    <div class="ai-messages" id="aiMessages" role="log" aria-live="polite" aria-relevant="additions" aria-label="Travel conversation"></div>
+    <div class="ai-prompts" aria-label="Suggested questions">${conciergePrompts.map((text,i)=>`<button onclick="askConcierge(conciergePrompts[${i}])">${text}</button>`).join("")}</div>
+    <form class="ai-composer" onsubmit="event.preventDefault();askConcierge()">
+      <input id="aiInput" aria-label="Ask a travel question" placeholder="Ask about stays, activities or a trip…" maxlength="500" autocomplete="off" />
+      <button class="ai-send" aria-label="Send question" type="submit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 19V5m-6 6 6-6 6 6"/></svg></button>
+    </form>
+  </div>`);
+  renderConciergeMessages();
+}
+
+function renderConciergeMessages() {
+  const target = $("#aiMessages");
+  if(!target) return;
+  target.innerHTML = `<div class="ai-message"><div class="ai-message-label">YOUR TRAVEL CONCIERGE</div><p>Where will your next trip take you? I can help find a stay, suggest things to do, or sketch a two-day escape. Try a question below.</p></div>`;
+  conciergeMessages.forEach(message => appendConciergeMessage(message));
+  target.scrollTop = target.scrollHeight;
+}
+
+function appendConciergeMessage(message) {
+  const target = $("#aiMessages");
+  const node = document.createElement("div");
+  node.className = `ai-message${message.user ? " ai-message-user" : ""}`;
+  node.innerHTML = `${message.user ? "" : '<div class="ai-message-label">CONCIERGE</div>'}<p>${conciergeEscape(message.text)}</p>${message.items?.length ? `<div class="ai-recommendations">${message.items.map(conciergeCard).join("")}</div>` : ""}`;
+  target.append(node);
+  target.scrollTop = target.scrollHeight;
+}
+
+function askConcierge(prompt) {
+  const input = $("#aiInput");
+  const question = (prompt || input?.value || "").trim().slice(0,500);
+  if(!question || !$("#aiMessages")) return;
+  if(input) input.value = "";
+  const user = {user:true, text:question};
+  const reply = conciergeReply(question);
+  conciergeMessages.push(user,reply);
+  if(conciergeMessages.length > 20) conciergeMessages.splice(0,2);
+  appendConciergeMessage(user);
+  appendConciergeMessage(reply);
+}
+
+function conciergeReply(question) {
+  const q = question.toLowerCase().replaceAll(",", "");
+  const nearProperty = /near.*(property|stay|home)|this property/.test(q);
+  const context = nearProperty && conciergeProperty ? findItem(conciergeProperty) : null;
+  const cities = [...new Set([...homes,...experiences,...services].map(x=>x.location))].sort((a,b)=>b.length-a.length);
+  const destination = cities.find(city=>q.includes(city.toLowerCase())) || (q.includes("goa") ? "Goa" : context?.location || "");
+  const inDestination = item => !destination || item.location.toLowerCase().includes(destination.toLowerCase()) || (destination.includes("Goa") && item.location === "Goa");
+  const budgetMatch = q.match(/(?:under|below|less than|budget(?: of)?)\s*(?:₹|rs\.?|inr)?\s*(\d+(?:\.\d+)?)\s*(k)?/);
+  const budget = budgetMatch ? Number(budgetMatch[1]) * (budgetMatch[2] ? 1000 : 1) : Infinity;
+  const groupMatch = q.match(/(\d+)\s*(?:people|guests|travell?ers|adults)/);
+  const guests = groupMatch ? Number(groupMatch[1]) : 0;
+  let stays = homes.filter(x=>inDestination(x) && x.price < budget && x.guests >= guests);
+  if(/beach house|beachfront/.test(q)) stays = stays.filter(x=>/beach|sea-view/i.test(x.type));
+  stays.sort((a,b)=>/best|people|guests/.test(q) ? Number(b.rating)-Number(a.rating) || a.price-b.price : a.price-b.price);
+  const activities = experiences.filter(inDestination);
+  const extras = services.filter(inDestination);
+
+  if(/plan|itinerary|\d+\s*day/.test(q)) {
+    const goaStays = homes.filter(x=>x.location.includes("Goa") && x.price < budget && x.guests >= guests).sort((a,b)=>a.price-b.price);
+    const tripStays = destination ? stays : goaStays;
+    const tripActivities = destination ? activities : experiences.filter(x=>x.location === "Goa");
+    const tripServices = destination ? extras : services.filter(x=>x.location === "Goa");
+    const place = destination || "Goa";
+    const dayOne = tripActivities[0], dayTwo = tripActivities[1];
+    return {text:`Here's a relaxed two-day ${place} escape:\n\nDay 1 · Settle in${dayOne ? `, then try ${dayOne.title.toLowerCase()} (${dayOne.duration})` : " and explore the neighbourhood at your own pace"}.\nDay 2 · ${dayTwo ? `${dayTwo.title} (${dayTwo.duration}), with time to unwind afterwards` : "Enjoy a slow morning and explore at your own pace"}.\n\n${tripStays.length ? "A stay to make your base" : "No matching home is available in this demo collection"}${tripServices.length ? ", plus an optional local service" : ""}. These are mock suggestions; availability is not checked.`,items:[tripStays[0],dayOne,dayTwo,tripServices[0]].filter(Boolean)};
+  }
+  if(/what can i do|things to do|activit|experience|near|food|surf|kayak|service|chef|massage/.test(q)) {
+    const relevant = [...activities,...extras];
+    const keyword = q.match(/surf|kayak|food|chef|massage|photograph|cooking/)?.[0];
+    if(keyword) relevant.sort((a,b)=>Number(b.title.toLowerCase().includes(keyword))-Number(a.title.toLowerCase().includes(keyword)));
+    return {text:relevant.length ? `Here are local experiences and services${destination ? ` in ${destination}` : " from our collection"}. Tap a recommendation to see the details.${nearProperty ? " These share the same destination; distances aren't available in this demo." : ""}` : `There are no matching experiences or services${destination ? ` in ${destination}` : ""} in this collection. Try Goa, Mumbai or New Delhi.`,items:relevant.slice(0,3)};
+  }
+  if(/stay|house|home|villa|beach|where|people|guest|under|budget/.test(q)) {
+    return {text:stays.length ? `${guests ? `These homes can host at least ${guests} guests` : "Here are a few stays you might like"}${destination ? ` in ${destination}` : ""}${Number.isFinite(budget) ? `, each under ₹${money(budget)} per night` : ""}.${/best/.test(q) ? " I've put the highest-rated matches first." : " Tap one to explore it."}` : "No homes in our demo collection match all those preferences. Try a higher budget, fewer guests, or a different destination.",items:stays.slice(0,3)};
+  }
+  return {text:"I can suggest stays by nightly budget, find homes for your group, recommend local experiences, or sketch a two-day trip. Try ‘Find a stay under ₹8,000’ or ‘What can I do in Goa?’",items:[]};
+}
 
 /* =========================================================
    INIT
