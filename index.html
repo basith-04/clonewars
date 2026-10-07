@@ -1407,6 +1407,41 @@ footer {
   .compare-table th, .compare-table td { padding-left: 10px; padding-right: 10px; }
 }
 
+
+/* A decorative local map; markers always use the current home results. */
+.map-switch { display: flex; align-items: center; gap: 3px; width: fit-content; padding: 4px; border: 1px solid #ddd; border-radius: 26px; background: white; margin: 0 0 24px auto; }
+.map-switch button { display: flex; align-items: center; justify-content: center; gap: 7px; border: 0; border-radius: 22px; padding: 0 16px; min-height: 40px; background: none; cursor: pointer; font-size: 13px; font-weight: 600; }
+.map-switch button.active { background: #222; color: white; }
+.map-switch svg, .mobile-map-toggle svg { width: 17px; height: 17px; }
+.mobile-map-toggle { display: none; }
+.mock-map { position: relative; width: 100%; min-width: 0; height: min(660px,75vh); min-height: 460px; overflow: hidden; border: 1px solid #e6e6e1; border-radius: 20px; background: #f0eee9; }
+.mock-map-art { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.mock-map-note { position: absolute; left: 14px; top: 14px; z-index: 2; padding: 9px 12px; border-radius: 12px; background: #fffffff2; box-shadow: 0 1px 5px #0001; font-size: 11px; color: #6a6a6a; max-width: calc(100% - 28px); }
+.mock-map-note strong { display: block; color: #222; font-size: 13px; margin-bottom: 3px; }
+.map-marker-zone { position: absolute; inset: 96px 18px 170px; }
+.map-price { position: absolute; transform: translate(-50%,-50%); border: 1px solid #e2e2e2; border-radius: 24px; min-height: 44px; padding: 8px 12px; background: white; color: #222; font-weight: 700; font-size: 13px; box-shadow: 0 2px 7px #0002; cursor: pointer; white-space: nowrap; }
+.map-price:hover { z-index: 3; border-color: #222; }
+.map-price.selected { background: #222; color: white; border-color: #222; z-index: 4; }
+.map-preview { position: absolute; bottom: 20px; left: 20px; width: min(380px,calc(100% - 40px)); z-index: 5; }
+.map-preview .ai-recommendation { padding: 10px; box-shadow: 0 4px 18px #0002; border-color: white; }
+.map-preview .ai-recommendation img { width: 90px; height: 90px; }
+.map-preview .ai-recommendation strong { white-space: normal; line-height: 19px; }
+.map-view-active > .listing-section, .map-view-active > .results-grid { display: none; }
+.map-pager { position: absolute; right: 14px; top: 85px; display: flex; align-items: center; gap: 8px; z-index: 6; background: white; border-radius: 24px; padding: 3px; font-size: 11px; box-shadow: 0 1px 6px #0001; }
+.map-pager button { border: 0; background: none; border-radius: 50%; width: 38px; height: 38px; font-size: 20px; cursor: pointer; }
+.map-pager button:disabled { color: #bbb; cursor: default; }
+.map-pager button:hover:not(:disabled) { background: #f7f7f7; }
+@media (max-width: 767px) {
+  .map-switch { display: none; }
+  .mobile-map-toggle { display: flex; align-items: center; justify-content: center; gap: 7px; position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(138px + env(safe-area-inset-bottom)); z-index: 72; min-height: 44px; padding: 10px 18px; border: 0; border-radius: 26px; color: white; background: #222; font-size: 13px; font-weight: 600; box-shadow: 0 3px 10px #0002; cursor: pointer; }
+  .mock-map { height: calc(100dvh - 230px); min-height: 430px; border-radius: 16px; }
+  .map-marker-zone { inset: 144px 10px 166px; }
+  .map-price { padding: 8px 10px; font-size: 12px; }
+  .map-preview { left: 12px; bottom: 14px; width: calc(100% - 24px); }
+  .map-preview .ai-recommendation img { width: 72px; height: 78px; }
+  .map-view-active .mock-map { scroll-margin-top: 155px; }
+}
+
 </style>
 </head>
 
@@ -2526,6 +2561,8 @@ function showSectionResults(id) {
 
 function renderHome() {
 
+  $("#content").classList.remove("map-view-active");
+
   $("#inspiration").classList.remove("hidden");
   $("#footer").classList.remove("hidden");
 
@@ -2614,6 +2651,7 @@ function renderHomesPage() {
     ${destinationSection()}
 
   `;
+  installMockMap(homes);
 }
 
 function renderExperiencesPage() {
@@ -2837,6 +2875,7 @@ function performSearch() {
 
   `;
 
+  installMockMap(results.filter(item=>item.category === "homes"));
   window.scrollTo({top:0,behavior:"smooth"});
 }
 
@@ -3836,6 +3875,96 @@ function openComparison() {
       ${items.length < 2 ? '<button class="primary-btn" onclick="closeModal()">Keep exploring</button>' : ""}
     </div>
   </div>`);
+}
+
+/* =========================================================
+   MOCK MAP — no external data, APIs or dependencies
+========================================================= */
+let mockMapHomes = [];
+let mockMapPage = 0;
+let mockMapSelected = null;
+const mockMapIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="m3 5 6-2 6 2 6-2v16l-6 2-6-2-6 2V5Zm6-2v16m6-14v16"/></svg>';
+const mockListIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M8 6h13M8 12h13M8 18h13M3 6h1M3 12h1M3 18h1"/></svg>';
+
+function installMockMap(items) {
+  const content = $("#content");
+  content.classList.remove("map-view-active");
+  mockMapHomes = items;
+  mockMapPage = 0;
+  mockMapSelected = items[0]?.id || null;
+  if(!items.length) return;
+  const controls = document.createElement("div");
+  controls.className = "map-switch";
+  controls.setAttribute("aria-label","Listing display mode");
+  controls.innerHTML = `<button class="active" data-map-mode="list" aria-pressed="true" onclick="setMockMapMode(false)">${mockListIcon}List</button><button data-map-mode="map" aria-pressed="false" onclick="setMockMapMode(true)">${mockMapIcon}Map</button>`;
+  const header = content.querySelector(".discovery-intro,.results-header");
+  header.after(controls);
+  content.insertAdjacentHTML("beforeend",`<section id="mockMap" class="mock-map hidden" aria-label="Illustrative map of homes">
+    <svg class="mock-map-art" viewBox="0 0 1000 700" preserveAspectRatio="none" aria-hidden="true">
+      <rect width="1000" height="700" fill="#f0eee9"/>
+      <path d="M0 0H165Q120 90 160 190T110 400Q170 550 80 700H0Z" fill="#d3e8eb"/>
+      <g fill="#e5e2db" stroke="#dedad2" stroke-width="2"><rect x="210" y="45" width="160" height="105" rx="12"/><rect x="440" y="30" width="190" height="160" rx="12"/><rect x="730" y="70" width="205" height="105" rx="12"/><rect x="200" y="255" width="130" height="175" rx="12"/><rect x="435" y="290" width="190" height="120" rx="12"/><rect x="760" y="265" width="160" height="150" rx="12"/><rect x="235" y="520" width="200" height="110" rx="12"/><rect x="520" y="485" width="140" height="140" rx="12"/></g>
+      <g fill="#dce5d5"><rect x="670" y="475" width="270" height="170" rx="55"/><rect x="370" y="215" width="110" height="80" rx="30"/></g>
+      <g fill="none" stroke="#fff" stroke-width="18" stroke-linejoin="round"><path d="M165 200 365 175 650 220 1000 190M120 465 365 455 680 435 1000 470M395 0 365 700M695 0 680 700M175 0 190 240 170 500 200 700"/><path d="m220 700 340-315L925 0" stroke-width="11"/></g>
+      <g fill="none" stroke="#e1ddd4" stroke-width="2"><path d="M165 200 365 175 650 220 1000 190M120 465 365 455 680 435 1000 470M395 0 365 700M695 0 680 700"/></g>
+    </svg>
+    <div class="mock-map-note"><strong>Explore homes</strong>Illustrative map · locations are not geographic</div>
+    <div class="map-pager" id="mapPager"></div>
+    <div class="map-marker-zone" id="mapMarkers"></div>
+    <div class="map-preview" id="mapPreview" aria-live="polite"></div>
+  </section><button class="mobile-map-toggle" id="mobileMapToggle" onclick="setMockMapMode(!$('#content').classList.contains('map-view-active'))" aria-controls="mockMap" aria-expanded="false">${mockMapIcon}<span>Map</span></button>`);
+  renderMockMapMarkers();
+  selectMockMapHome(mockMapSelected);
+}
+
+function setMockMapMode(showMap) {
+  const map = $("#mockMap");
+  if(!map) return;
+  $("#content").classList.toggle("map-view-active",showMap);
+  map.classList.toggle("hidden",!showMap);
+  $$("[data-map-mode]").forEach(button=>{
+    const active = (button.dataset.mapMode === "map") === showMap;
+    button.classList.toggle("active",active);
+    button.setAttribute("aria-pressed",String(active));
+  });
+  const toggle = $("#mobileMapToggle");
+  toggle.innerHTML = `${showMap ? mockListIcon : mockMapIcon}<span>${showMap ? "List" : "Map"}</span>`;
+  toggle.setAttribute("aria-expanded",String(showMap));
+  if(window.innerWidth < 768) {
+    if(showMap) map.scrollIntoView({block:"start",behavior:"smooth"});
+    else window.scrollTo({top:0,behavior:"smooth"});
+  }
+}
+
+function renderMockMapMarkers() {
+  const pageSize = 6;
+  const pages = Math.ceil(mockMapHomes.length/pageSize);
+  const items = mockMapHomes.slice(mockMapPage*pageSize,(mockMapPage+1)*pageSize);
+  $("#mapMarkers").innerHTML = items.map((item,i)=>{
+    const x = [17,50,83][i%3];
+    const y = i < 3 ? 23 : 72;
+    return `<button class="map-price ${item.id===mockMapSelected ? "selected" : ""}" data-map-home="${item.id}" style="left:${x}%;top:${y}%" aria-pressed="${item.id===mockMapSelected}" aria-label="${conciergeEscape(item.title)}, ₹${money(item.price)} per night" onclick="selectMockMapHome('${item.id}')">₹${money(item.price)}</button>`;
+  }).join("");
+  $("#mapPager").innerHTML = `<button aria-label="Previous homes" onclick="changeMockMapPage(-1)" ${mockMapPage===0 ? "disabled" : ""}>‹</button><span>${mockMapPage+1} / ${pages}</span><button aria-label="Next homes" onclick="changeMockMapPage(1)" ${mockMapPage===pages-1 ? "disabled" : ""}>›</button>`;
+}
+
+function changeMockMapPage(delta) {
+  mockMapPage = Math.max(0,Math.min(Math.ceil(mockMapHomes.length/6)-1,mockMapPage+delta));
+  mockMapSelected = mockMapHomes[mockMapPage*6].id;
+  renderMockMapMarkers();
+  selectMockMapHome(mockMapSelected);
+}
+
+function selectMockMapHome(id) {
+  const home = mockMapHomes.find(item=>item.id===id);
+  if(!home) return;
+  mockMapSelected = id;
+  $$("[data-map-home]").forEach(marker=>{
+    const selected = marker.dataset.mapHome===id;
+    marker.classList.toggle("selected",selected);
+    marker.setAttribute("aria-pressed",String(selected));
+  });
+  $("#mapPreview").innerHTML = conciergeCard(home);
 }
 
 /* =========================================================
