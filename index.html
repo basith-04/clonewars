@@ -1334,6 +1334,44 @@ footer {
   .ai-composer input { font-size: 16px; }
 }
 
+/* Trip planning stays inside the concierge sheet. */
+.ai-tabs { display: flex; gap: 20px; padding: 0 20px; border-bottom: 1px solid #eee; flex-shrink: 0; }
+.ai-tabs button { border: 0; border-bottom: 2px solid transparent; background: none; min-height: 44px; padding: 0 2px; color: #6a6a6a; cursor: pointer; font-weight: 600; }
+.ai-tabs button.active { border-bottom-color: #222; color: #222; }
+.ai-trip-panel { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: 20px; }
+.ai-trip-panel h2 { font-size: 21px; margin: 0 0 6px; }
+.ai-trip-intro { color: #6a6a6a; font-size: 13px; line-height: 20px; margin: 0 0 20px; }
+.ai-trip-fields { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 14px; }
+.ai-trip-fields label { display: grid; gap: 7px; font-size: 12px; font-weight: 600; min-width: 0; }
+.ai-trip-destination { grid-column: 1 / -1; }
+.ai-trip-fields select, .ai-trip-fields input { width: 100%; min-width: 0; min-height: 48px; padding: 12px; border: 1px solid #ccc; border-radius: 12px; color: #222; background: white; font-size: 14px; }
+.ai-trip-interests { border: 0; padding: 0; margin: 20px 0 0; min-width: 0; }
+.ai-trip-interests legend { font-size: 12px; font-weight: 600; margin-bottom: 10px; }
+.ai-interest-options { display: flex; flex-wrap: wrap; gap: 8px; }
+.ai-interest-options label { position: relative; cursor: pointer; }
+.ai-interest-options input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.ai-interest-options span { display: inline-flex; align-items: center; min-height: 44px; border: 1px solid #ddd; border-radius: 24px; padding: 10px 14px; font-size: 13px; }
+.ai-interest-options input:checked + span { border-color: #222; background: #f7f7f7; box-shadow: inset 0 0 0 1px #222; }
+.ai-interest-options input:focus-visible + span { outline: 2px solid #ff385c; outline-offset: 3px; }
+.ai-trip-form .primary-btn { background: #ff385c; min-height: 48px; }
+.ai-trip-result { margin-top: 24px; overflow-wrap: anywhere; }
+.ai-trip-result:empty { display: none; }
+.ai-trip-summary { padding-bottom: 18px; border-bottom: 1px solid #eee; }
+.ai-trip-summary p { font-size: 13px; line-height: 20px; color: #6a6a6a; }
+.ai-trip-day { margin: 22px 0; }
+.ai-trip-day h3 { font-size: 17px; margin: 0 0 14px; }
+.ai-trip-stop { display: grid; grid-template-columns: 68px minmax(0,1fr); gap: 10px; padding-bottom: 16px; }
+.ai-trip-stop time { font-size: 11px; font-weight: 600; color: #6a6a6a; padding-top: 12px; }
+.ai-trip-stop-copy { border-left: 2px solid #eee; padding: 10px 0 10px 12px; font-size: 13px; line-height: 19px; }
+.ai-trip-stop .ai-recommendation { gap: 8px; padding: 7px; }
+.ai-trip-stop .ai-recommendation img { width: 48px; height: 56px; }
+.ai-trip-stop .ai-recommendation strong { white-space: normal; }
+.ai-trip-stop .ai-recommendation small { font-size: 11px; }
+@media (max-width: 767px) {
+  .ai-tabs { padding: 0 16px; }
+  .ai-trip-panel { padding: 18px 16px max(20px,env(safe-area-inset-bottom)); }
+  .ai-trip-fields select, .ai-trip-fields input { font-size: 16px; }
+}
 </style>
 </head>
 
@@ -3522,6 +3560,24 @@ function openConcierge() {
       <div class="ai-heading"><strong>AI travel concierge</strong><small>Local demo · recommendations from our collection</small></div>
       <button class="modal-close" onclick="closeModal()" aria-label="Close concierge">×</button>
     </div>
+    <div class="ai-tabs" role="tablist" aria-label="Concierge tools">
+      <button id="aiChatTab" class="active" role="tab" aria-selected="true" aria-controls="aiMessages" onclick="showConciergeTab('chat')">Chat</button>
+      <button id="aiTripTab" role="tab" aria-selected="false" aria-controls="aiTripPanel" onclick="showConciergeTab('trip')">Plan a trip</button>
+    </div>
+    <div id="aiTripPanel" class="ai-trip-panel hidden" role="tabpanel" aria-labelledby="aiTripTab">
+      <h2>A trip that feels like you</h2>
+      <p class="ai-trip-intro">Choose your pace. We'll put together a local mock itinerary from our stays, experiences and services.</p>
+      <form class="ai-trip-form" id="aiTripForm" onsubmit="event.preventDefault();generateConciergeTrip()">
+        <div class="ai-trip-fields">
+          <label class="ai-trip-destination">Destination<select id="aiTripDestination" name="destination">${[...new Set([...homes,...experiences,...services].map(item=>item.location.includes('Goa')?'Goa':item.location))].map(city=>`<option ${city===conciergeTripState.destination?'selected':''}>${conciergeEscape(city)}</option>`).join('')}</select></label>
+          <label>Number of days<select name="days" id="aiTripDays">${[1,2,3,4,5].map(day=>`<option value="${day}" ${day===conciergeTripState.days?'selected':''}>${day} ${day===1?'day':'days'}</option>`).join('')}</select></label>
+          <label>Travellers<input id="aiTripTravellers" name="travellers" type="number" min="1" max="20" required value="${conciergeTripState.travellers}" /></label>
+        </div>
+        <fieldset class="ai-trip-interests"><legend>What do you love?</legend><div class="ai-interest-options">${['Beaches','Food','Adventure','Culture','Relaxation'].map(interest=>`<label><input type="checkbox" name="interest" value="${interest}" ${conciergeTripState.interests.includes(interest)?'checked':''}/><span>${interest}</span></label>`).join('')}</div></fieldset>
+        <button class="primary-btn" type="submit">Generate trip</button>
+      </form>
+      <div class="ai-trip-result" id="aiTripResult" aria-live="polite" tabindex="0">${conciergeTripHTML}</div>
+    </div>
     <div class="ai-messages" id="aiMessages" role="log" aria-live="polite" aria-relevant="additions" aria-label="Travel conversation"></div>
     <div class="ai-prompts" aria-label="Suggested questions">${conciergePrompts.map((text,i)=>`<button onclick="askConcierge(conciergePrompts[${i}])">${text}</button>`).join("")}</div>
     <form class="ai-composer" onsubmit="event.preventDefault();askConcierge()">
@@ -3530,6 +3586,72 @@ function openConcierge() {
     </form>
   </div>`);
   renderConciergeMessages();
+}
+
+const conciergeTripState = {destination:"Goa",days:2,travellers:2,interests:["Beaches","Food"]};
+let conciergeTripHTML = "";
+
+function showConciergeTab(tab) {
+  const trip = tab === "trip";
+  $("#aiTripPanel").classList.toggle("hidden",!trip);
+  $("#aiMessages").classList.toggle("hidden",trip);
+  $(".ai-sheet .ai-prompts").classList.toggle("hidden",trip);
+  $(".ai-sheet .ai-composer").classList.toggle("hidden",trip);
+  [["aiChatTab",!trip],["aiTripTab",trip]].forEach(([id,active])=>{
+    const button = document.getElementById(id);
+    button.classList.toggle("active",active);
+    button.setAttribute("aria-selected",String(active));
+  });
+}
+
+function generateConciergeTrip() {
+  const form = $("#aiTripForm");
+  if(!form.reportValidity()) return;
+  const data = new FormData(form);
+  Object.assign(conciergeTripState,{
+    destination:String(data.get("destination")),
+    days:Math.max(1,Math.min(5,Number(data.get("days"))||2)),
+    travellers:Math.max(1,Math.min(20,Number(data.get("travellers"))||2)),
+    interests:data.getAll("interest")
+  });
+  const {destination,days,travellers,interests} = conciergeTripState;
+  const local = item=>item.location === destination || (destination === "Goa" && item.location.includes("Goa"));
+  const interestWords = {
+    Beaches:/beach|surf|kayak|sea/i,
+    Food:/food|cook|chef|cater|coffee|brunch|café/i,
+    Adventure:/surf|kayak|cycling|desert|outdoor/i,
+    Culture:/art|heritage|pottery|architecture|market|photograph/i,
+    Relaxation:/massage|wellness|yoga|villa|cottage/i
+  };
+  const score = item=>interests.reduce((sum,interest)=>sum+Number(interestWords[interest].test(`${item.title} ${item.type||""} ${item.serviceType||""}`)),0);
+  const sortByInterest = (a,b)=>score(b)-score(a)||Number(b.rating)-Number(a.rating)||a.price-b.price;
+  const home = homes.filter(item=>local(item)&&item.guests>=travellers).sort(sortByInterest)[0];
+  const activities = experiences.filter(local).sort(sortByInterest);
+  const providers = services.filter(local).sort(sortByInterest);
+  const stop = (time,text,item)=>`<div class="ai-trip-stop"><time>${time}</time><div>${item ? conciergeCard(item) : `<div class="ai-trip-stop-copy">${conciergeEscape(text)}</div>`}</div></div>`;
+  const daytime = interests.includes("Beaches") && /Goa|Mumbai|Puducherry/.test(destination)
+    ? "Make time for the beach and a slow coastal walk"
+    : interests.includes("Culture") ? "Explore the neighbourhood, local architecture and markets"
+    : interests.includes("Adventure") ? "Head out for a self-guided neighbourhood walk"
+    : "Explore at your own pace, with time to unwind";
+  const evening = interests.includes("Food") ? "Enjoy dinner and discover local flavours" : "Take a relaxed evening stroll and enjoy dinner";
+  const itinerary = Array.from({length:days},(_,day)=>{
+    const activity = activities[day];
+    const provider = providers[day];
+    const activityTime = activity && /sunset/.test(activity.title.toLowerCase()) ? "5:30 PM" : "11:00 AM";
+    const activityStop = activity ? stop(activityTime,"",activity) : stop("11:00 AM",daytime);
+    const exploreStop = stop("2:00 PM",interests.includes("Relaxation") ? "A leisurely lunch and time to relax" : daytime);
+    return `<section class="ai-trip-day"><h3>Day ${day+1}</h3>
+      ${day===0 ? stop("10:00 AM",home ? "" : "Arrive and settle into your chosen accommodation",home) : stop("9:00 AM","Start with breakfast and a slow morning")}
+      ${activityTime === "5:30 PM" ? exploreStop+(provider ? stop("4:00 PM","",provider) : "")+activityStop : activityStop+exploreStop+(provider ? stop("4:00 PM","",provider) : "")}
+      ${stop("8:00 PM",evening)}
+    </section>`;
+  }).join("");
+  conciergeTripHTML = `<div class="ai-trip-summary"><h2>${conciergeEscape(destination)}, at your pace</h2><p>${days} ${days===1?"day":"days"} · ${travellers} ${travellers===1?"traveller":"travellers"}${interests.length ? ` · ${interests.map(conciergeEscape).join(" · ")}` : ""}</p><p>A suggested schedule with mock timings. Confirm check-in times and availability in each listing.${home ? "" : " No home in this destination matches your group size in our collection."}</p></div>${itinerary}<p class="ai-trip-intro">Tap any recommended stay, experience or service to see its details. Free time fills the gaps where our local collection has no further options.</p>`;
+  const result = $("#aiTripResult");
+  result.innerHTML = conciergeTripHTML;
+  result.focus({preventScroll:true});
+  $("#aiTripPanel").scrollTop = result.offsetTop - $("#aiTripPanel").offsetTop;
 }
 
 function renderConciergeMessages() {
