@@ -1162,240 +1162,125 @@ footer {
    RESPONSIVE
 ========================================================= */
 
-@media (max-width: 1100px) {
-  :root {
-    --page: calc(100% - 48px);
-  }
+/* Keep overflow inside the swipeable rows, never on the document. */
+.top-nav > *, .compact-inner > *, .detail-layout > *,
+.section-title, .content, .inspiration-inner, .footer-bottom > * { min-width: 0; }
+.card-row, .category-nav, .inspiration-tabs { overscroll-behavior-x: contain; }
+.category-nav::-webkit-scrollbar, .inspiration-tabs::-webkit-scrollbar { display: none; }
+.mobile-search-pill, .mobile-bottom-nav, .detail-reserve { display: none; }
+.modal-body { overflow-wrap: anywhere; }
+.toast { max-width: calc(100% - 32px); width: max-content; }
 
-  .brand-word {
-    display: none;
-  }
-
-  .category-nav {
-    gap: 18px;
-  }
-
-  .card-row {
-    grid-auto-columns: calc((100% - 36px) / 4);
-  }
-
-  .results-grid {
-    grid-template-columns: repeat(3,1fr);
-  }
-
-  .inspiration-grid {
-    grid-template-columns: repeat(3,1fr);
-  }
+@media (min-width: 768px) and (max-width: 1023px) {
+  :root { --page: calc(100% - 48px); }
+  .brand-word, .top-nav .host-btn, .compact-inner .host-btn { display: none; }
+  .category-nav { gap: 16px; }
+  .card-row { grid-auto-columns: calc((100% - 36px) / 4); }
+  .results-grid, .inspiration-grid { grid-template-columns: repeat(3,minmax(0,1fr)); }
+  .footer-bottom { flex-wrap: wrap; padding: 20px 0; }
+  .footer-bottom-left, .footer-bottom-right { flex-wrap: wrap; }
+  .detail-layout { grid-template-columns: minmax(0,1fr) 280px; gap: 24px; }
 }
 
 @media (max-width: 767px) {
-  :root {
-    --page: calc(100% - 32px);
+  :root { --page: calc(100% - 32px); }
+  .header-shell { position: sticky; top: 0; border-bottom: 1px solid #eee; padding-top: 12px; }
+  .top-nav { display: flex; flex-direction: column; height: auto; padding: 0; }
+  .top-nav .brand, .top-nav .nav-actions, .search-region, .compact-header { display: none; }
+  .mobile-search-pill {
+    display: flex; width: 100%; height: 58px; flex-shrink: 0; align-items: center;
+    gap: 14px; border: 1px solid #ddd; border-radius: 32px; background: white;
+    box-shadow: 0 3px 10px rgba(0,0,0,.08); padding: 0 20px; text-align: left; cursor: pointer;
   }
-
-  .header-shell {
-    border-bottom: 0;
-  }
-
-  .top-nav {
-    display: flex;
-    height: auto;
-    padding-top: 13px;
-    flex-direction: column;
-  }
-
-  .brand,
-  .nav-actions {
-    display: none;
-  }
-
-  .category-nav {
-    order: 2;
-    width: 100%;
-    height: 65px;
-    overflow-x: auto;
-    justify-content: flex-start;
-    gap: 26px;
-    scrollbar-width: none;
-  }
-
-  .category-btn {
-    min-width: 64px;
-  }
-
-  .category-btn.active::after {
-    bottom: 0;
-  }
-
-  .search-region {
-    order: 1;
-    width: 100%;
-    height: 68px;
-    padding-top: 0;
-  }
-
-  .search-bar {
-    width: 100%;
-    height: 54px;
-    display: flex;
-    padding: 0 7px 0 18px;
-  }
-
-  .search-section {
-    display: none;
-  }
-
-  .search-section:first-child {
-    display: block;
-    flex: 1;
-    height: auto;
-    padding: 0;
-    background: none;
-    box-shadow: none;
-  }
-
-  .search-section:first-child::after {
-    display: none;
-  }
-
-  .search-label {
-    font-size: 13px;
-  }
-
-  .search-value {
-    font-size: 12px;
-  }
-
-  .search-submit {
-    width: 40px;
-    height: 40px;
-  }
-
-  .search-popover {
-    position: fixed;
-    inset: auto 0 0 !important;
-    transform: none !important;
-    width: 100% !important;
-    max-height: 82vh;
-    border-radius: 24px 24px 0 0;
-    overflow: auto;
-  }
-
-  .calendars {
-    grid-template-columns: 1fr;
-  }
-
-  .calendar-month:nth-child(2) {
-    display: none;
-  }
-
-  .compact-header {
-    display: none;
-  }
-
-  main {
-    padding-top: 24px;
-  }
-
-  .discovery-intro h1 {
-    font-size: 23px;
-  }
-
-  .discovery-intro p {
-    font-size: 13px;
-  }
-
-  .section-title h2 {
-    font-size: 19px;
-  }
-
-  .carousel-actions {
-    display: none;
-  }
-
-  .card-row {
-    grid-auto-columns: 55%;
-    gap: 11px;
-    margin-right: -16px;
-  }
-
-  .image-wrap {
-    border-radius: 15px;
-  }
-
-  .results-grid {
-    grid-template-columns: repeat(2,1fr);
-    gap: 25px 10px;
-  }
-
-  .inspiration {
-    padding: 40px 16px;
-  }
-
-  .inspiration-grid {
-    grid-template-columns: repeat(2,1fr);
-    gap: 24px 15px;
-  }
-
-  .footer-main {
-    grid-template-columns: 1fr;
-    gap: 10px;
-  }
-
-  .footer-col {
-    border-bottom: 1px solid #ddd;
-    padding-bottom: 20px;
-  }
-
-  .footer-bottom {
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 22px 0;
-  }
-
-  .footer-bottom-left {
-    flex-wrap: wrap;
-  }
-
-  .detail-gallery {
-    height: 280px;
-    grid-template-columns: 1fr;
-  }
-
-  .detail-side {
-    display: none;
-  }
-
-  .detail-layout {
-    grid-template-columns: 1fr;
-    gap: 20px;
-  }
-
-  .booking-box {
-    position: static;
-  }
-
-  .modal-backdrop {
-    padding: 0;
-    align-items: end;
-  }
-
-  .modal,
-  .modal.large {
-    width: 100%;
-    border-radius: 20px 20px 0 0;
-    max-height: 94vh;
-  }
+  .mobile-search-pill > svg { width: 22px; height: 22px; flex-shrink: 0; }
+  .mobile-search-copy { min-width: 0; }
+  .mobile-search-copy strong { display: block; font-size: 14px; margin-bottom: 3px; }
+  .mobile-search-copy span { display: block; font-size: 12px; color: #6a6a6a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .category-nav { width: 100%; height: 78px; gap: 20px; overflow-x: auto; scrollbar-width: none; }
+  .category-btn { flex: 0 0 80px; min-width: 80px; padding-top: 6px; font-size: 12px; }
+  .category-icon { height: 30px; margin-bottom: 4px; }
+  .category-btn.active::after { bottom: 0; width: 52px; }
+  .category-btn.active svg { stroke-width: 2; }
+  main { padding-top: 24px; }
+  .discovery-intro { margin-bottom: 24px; }
+  .discovery-intro h1, .results-header h1 { font-size: 23px; }
+  .discovery-intro p { font-size: 13px; line-height: 20px; }
+  .listing-section { margin-bottom: 36px; }
+  .section-header { margin-bottom: 12px; }
+  .section-title { flex: 0 1 auto; gap: 2px; }
+  .section-title h2 { font-size: 18px; line-height: 24px; font-weight: 600; }
+  .section-more { width: 40px; height: 40px; flex-shrink: 0; background: transparent; font-size: 23px; }
+  .carousel-actions { display: none; }
+  .card-row { grid-auto-columns: clamp(170px, 46vw, 220px); gap: 11px; margin-right: -16px; padding-right: 16px; }
+  .image-wrap { aspect-ratio: 1; border-radius: 15px; }
+  .destination-card .image-wrap { aspect-ratio: 1.08; }
+  .heart { width: 44px; height: 44px; top: 3px; right: 3px; background: transparent; }
+  .badge { top: 10px; left: 8px; font-size: 10px; padding: 5px 8px; max-width: calc(100% - 54px); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .card-title { font-size: 13px; line-height: 18px; }
+  .card-subtitle { font-size: 12px; line-height: 17px; }
+  .card-meta { font-size: 12px; line-height: 17px; }
+  .results-grid { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 24px 10px; }
+  .results-grid .badge { font-size: 9px; padding: 5px 6px; }
+  .inspiration { margin-top: 44px; padding: 32px 16px; }
+  .inspiration h2 { font-size: 20px; line-height: 26px; }
+  .inspiration-tab { min-height: 44px; flex-shrink: 0; }
+  .inspiration-grid { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 24px 16px; }
+  .show-more { min-height: 44px; margin-top: 16px; padding: 0; }
+  .footer-main { grid-template-columns: minmax(0,1fr); gap: 24px; padding: 30px 0 0; }
+  .footer-col { border-bottom: 1px solid #ddd; padding-bottom: 20px; }
+  .footer-bottom { flex-direction: column; align-items: flex-start; padding: 24px 0 100px; border-top: 0; gap: 18px; font-size: 13px; }
+  .footer-bottom-left, .footer-bottom-right { flex-wrap: wrap; gap: 12px; }
+  .footer-bottom-right .host-btn { padding: 0 6px; }
+  .social { display: inline-grid; place-items: center; min-width: 40px; min-height: 44px; }
+  .modal-backdrop { padding: 0; align-items: end; }
+  .modal, .modal.large { width: 100%; max-height: 96vh; max-height: 96dvh; border-radius: 20px 20px 0 0; overscroll-behavior-y: contain; }
+  .modal-head { position: sticky; top: 0; z-index: 2; background: white; padding: 0 16px; }
+  .modal-close { width: 44px; height: 44px; flex-shrink: 0; }
+  .modal-body { padding: 20px 16px; }
+  .detail-body { display: flex; flex-direction: column; }
+  .detail-title { font-size: 23px; line-height: 29px; }
+  .detail-gallery { order: -1; height: auto; aspect-ratio: 1.15; display: flex; gap: 8px; margin: 0 0 20px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; border-radius: 15px; }
+  .detail-gallery > img { flex: 0 0 100%; min-width: 0; scroll-snap-align: start; }
+  .detail-side { display: contents; }
+  .detail-side img { flex: 0 0 100%; min-width: 0; scroll-snap-align: start; }
+  .detail-layout { grid-template-columns: minmax(0,1fr); gap: 16px; margin-top: 12px; }
+  .detail-copy p { line-height: 22px; }
+  .booking-box { position: static; box-shadow: none; padding: 18px; }
+  .detail-reserve { display: flex; align-items: center; justify-content: space-between; gap: 16px; position: sticky; bottom: 0; background: white; border-top: 1px solid #ddd; padding: 12px 16px max(12px,env(safe-area-inset-bottom)); z-index: 3; }
+  .detail-reserve .primary-btn { width: auto; margin: 0; min-width: 130px; }
+  .mobile-bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; display: flex; justify-content: center; gap: 32px; z-index: 60; background: white; border-top: 1px solid #eee; padding: 6px 16px max(6px,env(safe-area-inset-bottom)); }
+  .mobile-bottom-nav button { background: none; border: 0; min-width: 64px; min-height: 52px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; font-size: 10px; color: #6a6a6a; cursor: pointer; }
+  .mobile-bottom-nav svg { width: 24px; height: 24px; }
+  .mobile-bottom-nav button:first-child { color: var(--accent); }
+  .toast { bottom: 82px; }
+  .mobile-search-sheet { height: 96vh; height: 96dvh; display: flex; flex-direction: column; overflow: hidden; background: #f7f7f7; }
+  .mobile-search-sheet .modal-head { flex-shrink: 0; background: #f7f7f7; border: 0; }
+  .mobile-search-sections { padding: 8px 16px 24px; overflow-y: auto; overscroll-behavior: contain; flex: 1; min-height: 0; }
+  .mobile-search-card { background: white; border: 1px solid #e5e5e5; border-radius: 20px; margin-bottom: 12px; padding: 20px 16px; }
+  .mobile-search-card h2 { font-size: 21px; margin: 0 0 16px; }
+  .mobile-search-card .search-popover { position: static; width: 100%; padding: 0; box-shadow: none; transform: none; border-radius: 0; }
+  .destination-input { font-size: 16px; min-height: 52px; }
+  .destination-list { max-height: 230px; }
+  .destination-option { min-height: 64px; }
+  .destination-option > div { min-width: 0; }
+  .destination-thumb { flex-shrink: 0; }
+  .calendars { grid-template-columns: minmax(0,1fr); gap: 0; }
+  .calendar-month:nth-child(2) { display: none; }
+  .calendar-grid { gap: 2px; }
+  .day { height: 44px; min-width: 0; padding: 0; }
+  .calendar-arrow, .counter button { width: 44px; height: 44px; }
+  .calendar-header { margin-bottom: 14px; }
+  .counter { gap: 10px; flex-shrink: 0; }
+  .counter span { width: 15px; text-align: center; }
+  .guest-row { gap: 12px; }
+  .guest-desc { font-size: 12px; }
+  .mobile-search-footer { flex-shrink: 0; border-top: 1px solid #ddd; padding: 12px 16px max(16px,env(safe-area-inset-bottom)); background: white; }
+  .mobile-search-footer .primary-btn { margin: 0; background: var(--accent); min-height: 48px; }
+  .mobile-date-summary { color: #6a6a6a; margin: 14px 0 0; font-size: 13px; }
 }
-
-@media (max-width: 450px) {
-  .card-row {
-    grid-auto-columns: 61%;
-  }
-
-  .results-grid {
-    grid-template-columns: 1fr 1fr;
-  }
+@media (max-width: 430px) {
+  .card-row { grid-auto-columns: clamp(170px, 49vw, 190px); }
+  .results-grid .card-meta { font-size: 11.5px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1428,7 +1313,11 @@ footer {
       <span class="brand-word">airbnb</span>
     </div>
 
-    <nav class="category-nav" id="categoryNav"></nav>
+    <button class="mobile-search-pill" onclick="openMobileSearch()" aria-label="Search destinations, dates and guests">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4.5 4.5"/></svg>
+      <span class="mobile-search-copy"><strong>Where to?</strong><span id="mobileSearchSummary">Anywhere · Any week · Add guests</span></span>
+    </button>
+    <nav class="category-nav" id="categoryNav" aria-label="Browse categories"></nav>
 
     <div class="nav-actions">
 
@@ -1499,9 +1388,9 @@ footer {
       <!-- dates -->
       <div id="datesPopover" class="search-popover date-popover hidden">
         <div class="calendar-header">
-          <button class="calendar-arrow" onclick="shiftMonth(-1)">‹</button>
+          <button class="calendar-arrow" aria-label="Previous month" onclick="shiftMonth(-1)">‹</button>
           <span class="calendar-title">Choose your dates</span>
-          <button class="calendar-arrow" onclick="shiftMonth(1)">›</button>
+          <button class="calendar-arrow" aria-label="Next month" onclick="shiftMonth(1)">›</button>
         </div>
         <div class="calendars" id="calendars"></div>
       </div>
@@ -1658,6 +1547,11 @@ footer {
 
 </footer>
 
+<nav class="mobile-bottom-nav" aria-label="Main navigation">
+  <button onclick="goHome()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4.5 4.5"/></svg>Explore</button>
+  <button onclick="openWishlist()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z"/></svg>Wishlists</button>
+  <button onclick="openLogin()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="8" r="4"/><path d="M4 21c.8-4.2 3.5-6.5 8-6.5s7.2 2.3 8 6.5"/></svg>Log in</button>
+</nav>
 <div id="modalRoot"></div>
 <div id="toastRoot"></div>
 
@@ -1984,7 +1878,7 @@ function renderCategories() {
 
   $("#categoryNav").innerHTML = categories.map(([key,label]) => `
     <button
-      class="category-btn ${activeCategory===key?"active":""}"
+      class="category-btn ${activeCategory===key?"active":""}" aria-pressed="${activeCategory===key}"
       onclick="setCategory('${key}')"
     >
       <div class="category-icon">${icons[key]}</div>
@@ -2015,7 +1909,7 @@ function renderDestinationOptions() {
   );
 
   $("#destinationList").innerHTML = filtered.map(x => `
-    <div class="destination-option" onclick="selectDestination('${x.name.replaceAll("'","\\'")}')">
+    <div class="destination-option" role="button" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.click()}" onclick="selectDestination('${x.name.replaceAll("'","\\'")}')">
 
       <img
         class="destination-thumb"
@@ -2039,12 +1933,63 @@ function selectDestination(name) {
   $("#destinationValue").textContent = name;
   $("#compactWhere").textContent = name;
 
-  closeSearchPopovers();
+  updateMobileSearchSummary();
+  if(mobileSearchOpen) {
+    $("#destinationInput").value = name;
+    renderDestinationOptions();
+    $("#mobileWhen").closest("section").scrollIntoView({behavior:"smooth",block:"start"});
+  } else closeSearchPopovers();
 }
 
 /* =========================================================
    SEARCH POPOVERS
 ========================================================= */
+
+let mobileSearchOpen = false;
+let modalOpener = null;
+const mobileSearchControls = [];
+
+function updateMobileSearchSummary() {
+  $("#mobileSearchSummary").textContent = `${searchState.destination || "Anywhere"} · ${$("#compactDate").textContent} · ${$("#guestValue").textContent}`;
+  if($("#mobileDateSummary")) $("#mobileDateSummary").textContent = $("#dateValue").textContent;
+}
+
+function openMobileSearch() {
+  closeSearchPopovers();
+  showModal(`
+    <div class="modal mobile-search-sheet">
+      <div class="modal-head"><button class="modal-close" onclick="closeModal()" aria-label="Close search">×</button><strong>Search your next trip</strong></div>
+      <div class="mobile-search-sections">
+        <section class="mobile-search-card"><h2>Where to?</h2><div id="mobileWhere"></div></section>
+        <section class="mobile-search-card"><h2>When?</h2><div id="mobileWhen"></div><p class="mobile-date-summary" id="mobileDateSummary"></p></section>
+        <section class="mobile-search-card"><h2>Who's coming?</h2><div id="mobileWho"></div></section>
+      </div>
+      <div class="mobile-search-footer"><button class="primary-btn" onclick="performSearch()">Search</button></div>
+    </div>
+  `);
+  mobileSearchOpen = true;
+  [["destinationPopover","mobileWhere"],["datesPopover","mobileWhen"],["guestsPopover","mobileWho"]].forEach(([id,target])=>{
+    const node = document.getElementById(id);
+    const placeholder = document.createComment(id);
+    node.before(placeholder);
+    mobileSearchControls.push({node,placeholder});
+    document.getElementById(target).append(node);
+    node.classList.remove("hidden");
+  });
+  $("#destinationInput").value = searchState.destination;
+  renderDestinationOptions();
+  renderCalendars();
+  renderGuestPicker();
+  updateMobileSearchSummary();
+}
+
+function restoreMobileSearch() {
+  mobileSearchControls.splice(0).forEach(({node,placeholder})=>{
+    node.classList.add("hidden");
+    placeholder.replaceWith(node);
+  });
+  mobileSearchOpen = false;
+}
 
 function toggleSearchPopover(type, button) {
 
@@ -2117,12 +2062,12 @@ function renderGuestPicker() {
 
           <button
             ${count===0?"disabled":""}
-            onclick="changeGuest('${key}',-1)"
+            aria-label="Remove ${label.toLowerCase()}" onclick="changeGuest('${key}',-1)"
           >−</button>
 
           <span>${count}</span>
 
-          <button onclick="changeGuest('${key}',1)">+</button>
+          <button aria-label="Add ${label.toLowerCase()}" onclick="changeGuest('${key}',1)">+</button>
 
         </div>
 
@@ -2166,6 +2111,7 @@ function updateGuestSummary() {
 
   $("#guestValue").textContent = value;
   $("#compactGuests").textContent = main ? `${main} guests` : "Add guests";
+  updateMobileSearchSummary();
 }
 
 /* =========================================================
@@ -2218,7 +2164,7 @@ function renderMonth(date) {
 
     cells += `
       <button
-        class="day ${selected?"selected":""}"
+        class="day ${selected?"selected":""}" aria-label="${d} ${monthName}" aria-pressed="${selected}"
         onclick="selectDate('${key}')"
       >${d}</button>
     `;
@@ -2272,6 +2218,7 @@ function updateDateSummary() {
   if(!searchState.start) {
     $("#dateValue").textContent = "Add dates";
     $("#compactDate").textContent = "Any week";
+    updateMobileSearchSummary();
     return;
   }
 
@@ -2288,6 +2235,7 @@ function updateDateSummary() {
 
   $("#dateValue").textContent = value;
   $("#compactDate").textContent = value;
+  updateMobileSearchSummary();
 }
 
 /* =========================================================
@@ -2682,6 +2630,8 @@ function destinationSearch(name) {
 
 function performSearch() {
 
+  if(mobileSearchOpen) closeModal();
+  updateMobileSearchSummary();
   closeSearchPopovers();
 
   let pool =
@@ -2796,11 +2746,11 @@ function openDetail(id) {
     <div class="modal large">
 
       <div class="modal-head">
-        <button class="modal-close" onclick="closeModal()">×</button>
+        <button class="modal-close" aria-label="Close dialog" onclick="closeModal()">×</button>
         <strong>${item.category==="homes"?"Stay details":"Details"}</strong>
       </div>
 
-      <div class="modal-body">
+      <div class="modal-body detail-body">
 
         <h2 class="detail-title">${item.title}</h2>
 
@@ -2901,7 +2851,10 @@ function openDetail(id) {
         </div>
 
       </div>
-
+      <div class="detail-reserve">
+        <div><strong>₹${money(item.price)}</strong><div class="card-subtitle">${item.category==="homes"?"/ night":"/ person"}</div></div>
+        <button class="primary-btn" onclick="mockReserve('${item.id}')">Reserve</button>
+      </div>
     </div>
 
   `);
@@ -2922,7 +2875,7 @@ function openWishlist() {
     <div class="modal large">
 
       <div class="modal-head">
-        <button class="modal-close" onclick="closeModal()">×</button>
+        <button class="modal-close" aria-label="Close dialog" onclick="closeModal()">×</button>
         <strong>Wishlist</strong>
       </div>
 
@@ -2968,7 +2921,7 @@ function openLogin() {
     <div class="modal">
 
       <div class="modal-head">
-        <button class="modal-close" onclick="closeModal()">×</button>
+        <button class="modal-close" aria-label="Close dialog" onclick="closeModal()">×</button>
         <strong>Log in or sign up</strong>
       </div>
 
@@ -3023,7 +2976,7 @@ function openHostModal() {
     <div class="modal">
 
       <div class="modal-head">
-        <button class="modal-close" onclick="closeModal()">×</button>
+        <button class="modal-close" aria-label="Close dialog" onclick="closeModal()">×</button>
         <strong>Become a host</strong>
       </div>
 
@@ -3081,7 +3034,7 @@ function openLanguage() {
     <div class="modal">
 
       <div class="modal-head">
-        <button class="modal-close" onclick="closeModal()">×</button>
+        <button class="modal-close" aria-label="Close dialog" onclick="closeModal()">×</button>
         <strong>Language & currency</strong>
       </div>
 
@@ -3123,7 +3076,7 @@ function mockReserve(id) {
     <div class="modal">
 
       <div class="modal-head">
-        <button class="modal-close" onclick="closeModal()">×</button>
+        <button class="modal-close" aria-label="Close dialog" onclick="closeModal()">×</button>
         <strong>Confirm and pay</strong>
       </div>
 
@@ -3229,6 +3182,9 @@ function mockConfirmation() {
 
 function showModal(html) {
 
+  if(mobileSearchOpen) restoreMobileSearch();
+  if(!$("#modalRoot").innerHTML) modalOpener = document.activeElement;
+
   $("#modalRoot").innerHTML = `
     <div
       class="modal-backdrop"
@@ -3239,11 +3195,18 @@ function showModal(html) {
   `;
 
   document.body.style.overflow = "hidden";
+  const modal = $("#modalRoot .modal");
+  modal.setAttribute("role","dialog");
+  modal.setAttribute("aria-modal","true");
+  modal.setAttribute("aria-label",modal.querySelector(".modal-head strong, h2")?.textContent || "Dialog");
+  modal.querySelector("button, input")?.focus();
 }
 
 function closeModal() {
+  restoreMobileSearch();
   $("#modalRoot").innerHTML = "";
   document.body.style.overflow = "";
+  modalOpener?.focus();
 }
 
 function backdropClose(event) {
@@ -3437,6 +3400,13 @@ document.addEventListener("click",event=>{
 });
 
 document.addEventListener("keydown",event=>{
+  if(event.key === "Tab" && $("#modalRoot .modal")) {
+    const controls = [...$("#modalRoot .modal").querySelectorAll("button:not(:disabled), input, a[href], [tabindex='0']")].filter(x=>x.getClientRects().length);
+    const first = controls[0], last = controls[controls.length-1];
+    if(event.shiftKey && document.activeElement===first) { event.preventDefault(); last?.focus(); }
+    else if(!event.shiftKey && document.activeElement===last) { event.preventDefault(); first?.focus(); }
+  }
+
 
   if(event.key==="Escape") {
 
@@ -3447,6 +3417,12 @@ document.addEventListener("keydown",event=>{
     if($("#modalRoot").innerHTML)
       closeModal();
   }
+});
+
+// Restore the desktop popovers when crossing the mobile breakpoint.
+window.matchMedia("(max-width: 767px)").addEventListener("change",()=>{
+  if(mobileSearchOpen) closeModal();
+  closeSearchPopovers();
 });
 
 window.addEventListener("scroll",()=>{
