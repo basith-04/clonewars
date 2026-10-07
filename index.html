@@ -1,0 +1,3476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Staybnb — Homes, Experiences & Services</title>
+
+<style>
+/* =========================================================
+   RESET / TOKENS
+========================================================= */
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  color: #222;
+  background: #fff;
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    Helvetica,
+    Arial,
+    sans-serif;
+  font-size: 14px;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+button {
+  color: inherit;
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img {
+  display: block;
+  width: 100%;
+}
+
+:root {
+  --accent: #ff385c;
+  --accent-dark: #e31c5f;
+  --text: #222;
+  --muted: #6a6a6a;
+  --border: #ddd;
+  --surface: #f7f7f7;
+  --surface2: #f2f2f2;
+  --hover: #ebebeb;
+  --page: min(1440px, calc(100% - 64px));
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.header-shell {
+  background: #fff;
+  border-bottom: 1px solid #ebebeb;
+  position: relative;
+  z-index: 50;
+}
+
+.top-nav {
+  max-width: var(--page);
+  margin: auto;
+  height: 82px;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--accent);
+  font-weight: 800;
+  font-size: 22px;
+  cursor: pointer;
+  width: fit-content;
+}
+
+.brand-logo {
+  width: 34px;
+  height: 34px;
+}
+
+.brand-word {
+  letter-spacing: -1px;
+}
+
+.category-nav {
+  display: flex;
+  height: 100%;
+  align-items: center;
+  gap: 32px;
+}
+
+.category-btn {
+  border: 0;
+  background: none;
+  cursor: pointer;
+  color: #6a6a6a;
+  height: 100%;
+  min-width: 64px;
+  padding: 7px 2px 0;
+  position: relative;
+  transition: color .15s ease;
+}
+
+.category-btn:hover {
+  color: #222;
+}
+
+.category-btn.active {
+  color: #222;
+  font-weight: 600;
+}
+
+.category-btn.active::after {
+  content: "";
+  position: absolute;
+  height: 2px;
+  width: 38px;
+  background: #222;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.category-icon {
+  height: 28px;
+  margin-bottom: 3px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.category-icon svg {
+  width: 25px;
+  height: 25px;
+}
+
+.nav-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
+}
+
+.host-btn {
+  border: 0;
+  background: transparent;
+  border-radius: 24px;
+  height: 42px;
+  padding: 0 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.host-btn:hover {
+  background: var(--surface);
+}
+
+.circle-btn {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 0;
+  background: var(--surface2);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+
+.circle-btn:hover {
+  background: var(--hover);
+}
+
+.circle-btn svg {
+  width: 19px;
+  height: 19px;
+}
+
+/* =========================================================
+   SEARCH
+========================================================= */
+
+.search-region {
+  height: 119px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 5px;
+}
+
+.search-bar {
+  width: min(850px, calc(100% - 40px));
+  height: 66px;
+  border: 1px solid #ddd;
+  border-radius: 40px;
+  box-shadow: 0 5px 18px rgba(0,0,0,.11);
+  display: grid;
+  grid-template-columns: 1.35fr 1fr 1fr 66px;
+  align-items: center;
+  background: white;
+  position: relative;
+}
+
+.search-section {
+  height: 52px;
+  padding: 9px 30px;
+  border: 0;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+  border-radius: 30px;
+  position: relative;
+}
+
+.search-section:not(:nth-child(3))::after {
+  content: "";
+  width: 1px;
+  height: 30px;
+  background: #ddd;
+  position: absolute;
+  right: 0;
+  top: 11px;
+}
+
+.search-section:hover {
+  background: #f7f7f7;
+}
+
+.search-section:hover::after {
+  display: none;
+}
+
+.search-section.active {
+  background: #fff;
+  box-shadow: 0 4px 20px rgba(0,0,0,.12);
+}
+
+.search-label {
+  font-size: 12px;
+  font-weight: 700;
+  margin-bottom: 3px;
+}
+
+.search-value {
+  color: #717171;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.search-submit {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 0;
+  background: var(--accent-dark);
+  color: white;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+
+.search-submit:hover {
+  background: #d70466;
+}
+
+.search-submit svg {
+  width: 19px;
+}
+
+/* =========================================================
+   SEARCH POPOVERS
+========================================================= */
+
+.search-popover {
+  position: absolute;
+  top: 72px;
+  background: white;
+  border-radius: 26px;
+  box-shadow: 0 8px 32px rgba(0,0,0,.17);
+  padding: 24px;
+  z-index: 100;
+}
+
+.destination-popover {
+  left: 0;
+  width: 440px;
+}
+
+.guest-popover {
+  right: 0;
+  width: 390px;
+}
+
+.date-popover {
+  left: 50%;
+  transform: translateX(-50%);
+  width: 680px;
+}
+
+.destination-input {
+  width: 100%;
+  border: 1px solid #aaa;
+  border-radius: 12px;
+  padding: 14px 15px;
+  outline: none;
+  margin-bottom: 15px;
+}
+
+.destination-input:focus {
+  border-color: #222;
+  box-shadow: inset 0 0 0 1px #222;
+}
+
+.destination-list {
+  max-height: 320px;
+  overflow: auto;
+}
+
+.destination-option {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding: 9px;
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+.destination-option:hover {
+  background: #f7f7f7;
+}
+
+.destination-thumb {
+  width: 48px;
+  height: 48px;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+.destination-name {
+  font-weight: 600;
+}
+
+.destination-description {
+  color: #717171;
+  font-size: 12px;
+  margin-top: 2px;
+}
+
+/* guests */
+
+.guest-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 17px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.guest-row:last-child {
+  border-bottom: 0;
+}
+
+.guest-title {
+  font-weight: 600;
+}
+
+.guest-desc {
+  color: #717171;
+  font-size: 13px;
+  margin-top: 4px;
+}
+
+.counter {
+  display: flex;
+  gap: 13px;
+  align-items: center;
+}
+
+.counter button {
+  border: 1px solid #aaa;
+  background: white;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 20px;
+  line-height: 1;
+}
+
+.counter button:disabled {
+  color: #ccc;
+  border-color: #ddd;
+}
+
+/* calendar */
+
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.calendar-title {
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.calendar-arrow {
+  border: 0;
+  background: transparent;
+  border-radius: 50%;
+  width: 34px;
+  height: 34px;
+  cursor: pointer;
+}
+
+.calendar-arrow:hover {
+  background: #f2f2f2;
+}
+
+.calendars {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+}
+
+.month-name {
+  text-align: center;
+  font-weight: 700;
+  margin-bottom: 13px;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+  gap: 4px;
+}
+
+.day-name {
+  font-size: 11px;
+  color: #717171;
+  padding-bottom: 8px;
+}
+
+.day {
+  border: 0;
+  background: transparent;
+  height: 35px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.day:hover {
+  border: 1px solid #222;
+}
+
+.day.selected {
+  background: #222;
+  color: white;
+}
+
+.day.muted {
+  color: #bbb;
+}
+
+/* =========================================================
+   STICKY COMPACT HEADER
+========================================================= */
+
+.compact-header {
+  height: 78px;
+  background: white;
+  position: fixed;
+  z-index: 45;
+  left: 0;
+  right: 0;
+  top: 0;
+  border-bottom: 1px solid #eee;
+  box-shadow: 0 2px 7px rgba(0,0,0,.04);
+  transform: translateY(-100%);
+  transition: transform .22s ease;
+}
+
+.compact-header.show {
+  transform: translateY(0);
+}
+
+.compact-inner {
+  max-width: var(--page);
+  height: 100%;
+  margin: auto;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+}
+
+.compact-search {
+  height: 48px;
+  border: 1px solid #ddd;
+  box-shadow: 0 2px 10px rgba(0,0,0,.1);
+  background: white;
+  border-radius: 30px;
+  padding: 0 8px 0 20px;
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  cursor: pointer;
+}
+
+.compact-search strong {
+  font-size: 13px;
+}
+
+.compact-search span {
+  color: #717171;
+  border-left: 1px solid #ddd;
+  padding-left: 12px;
+  font-size: 13px;
+}
+
+.compact-search .mini-search {
+  background: var(--accent);
+  color: white;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+}
+
+/* =========================================================
+   MAIN CONTENT
+========================================================= */
+
+main {
+  padding-top: 49px;
+}
+
+.content {
+  max-width: var(--page);
+  margin: auto;
+}
+
+.discovery-intro {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 30px;
+}
+
+.discovery-intro h1 {
+  font-size: 28px;
+  margin: 0;
+  letter-spacing: -.5px;
+}
+
+.discovery-intro p {
+  color: #717171;
+  margin: 6px 0 0;
+}
+
+/* =========================================================
+   ROWS
+========================================================= */
+
+.listing-section {
+  margin-bottom: 48px;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 17px;
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  flex: 1;
+}
+
+.section-title h2 {
+  margin: 0;
+  font-size: 20px;
+  letter-spacing: -.25px;
+}
+
+.section-more {
+  width: 27px;
+  height: 27px;
+  border: 0;
+  border-radius: 50%;
+  background: #f2f2f2;
+  cursor: pointer;
+}
+
+.carousel-actions {
+  display: flex;
+  gap: 7px;
+}
+
+.carousel-btn {
+  width: 32px;
+  height: 32px;
+  border: 0;
+  border-radius: 50%;
+  background: #f2f2f2;
+  cursor: pointer;
+}
+
+.carousel-btn:hover {
+  background: #e6e6e6;
+}
+
+.card-row {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: calc((100% - 60px) / 6);
+  gap: 12px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  scroll-snap-type: x proximity;
+}
+
+.card-row::-webkit-scrollbar {
+  display: none;
+}
+
+/* =========================================================
+   CARDS
+========================================================= */
+
+.card {
+  min-width: 0;
+  cursor: pointer;
+  scroll-snap-align: start;
+}
+
+.image-wrap {
+  position: relative;
+  aspect-ratio: 1.05 / 1;
+  border-radius: 18px;
+  overflow: hidden;
+  background: #eee;
+}
+
+.image-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform .25s ease;
+}
+
+.card:hover .image-wrap img {
+  transform: scale(1.015);
+}
+
+.badge {
+  position: absolute;
+  top: 11px;
+  left: 11px;
+  padding: 6px 10px;
+  background: rgba(255,255,255,.94);
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  box-shadow: 0 1px 5px rgba(0,0,0,.13);
+}
+
+.heart {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 34px;
+  height: 34px;
+  border: 0;
+  background: rgba(0,0,0,.15);
+  border-radius: 50%;
+  color: white;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+
+.heart svg {
+  width: 23px;
+  height: 23px;
+  fill: rgba(0,0,0,.28);
+  stroke: white;
+  stroke-width: 2;
+}
+
+.heart.saved svg {
+  fill: #ff385c;
+  stroke: white;
+}
+
+.card-info {
+  padding-top: 9px;
+}
+
+.card-title {
+  font-weight: 600;
+  line-height: 19px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.card-subtitle {
+  color: #6a6a6a;
+  margin-top: 2px;
+  font-size: 13px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.card-meta {
+  font-size: 12.5px;
+  margin-top: 3px;
+}
+
+/* =========================================================
+   DESTINATIONS
+========================================================= */
+
+.destination-card .image-wrap {
+  aspect-ratio: 1.15;
+}
+
+.destination-card .card-title {
+  margin-top: 1px;
+}
+
+/* =========================================================
+   RESULTS
+========================================================= */
+
+.results-header {
+  margin-bottom: 27px;
+}
+
+.results-header h1 {
+  margin: 0 0 7px;
+  font-size: 28px;
+}
+
+.filter-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 18px;
+}
+
+.chip {
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  background: white;
+  padding: 8px 13px;
+}
+
+.results-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 28px 16px;
+}
+
+/* =========================================================
+   INSPIRATION
+========================================================= */
+
+.inspiration {
+  background: #f7f7f7;
+  margin-top: 80px;
+  padding: 48px max(32px, calc((100vw - min(1440px, calc(100vw - 64px))) / 2));
+}
+
+.inspiration-inner {
+  max-width: 1440px;
+  margin: auto;
+}
+
+.inspiration h2 {
+  margin: 0 0 22px;
+  font-size: 22px;
+}
+
+.inspiration-tabs {
+  display: flex;
+  gap: 26px;
+  overflow-x: auto;
+  border-bottom: 1px solid #ddd;
+  scrollbar-width: none;
+}
+
+.inspiration-tab {
+  white-space: nowrap;
+  padding: 0 0 14px;
+  border: 0;
+  background: transparent;
+  color: #717171;
+  cursor: pointer;
+}
+
+.inspiration-tab.active {
+  color: #222;
+  font-weight: 600;
+  border-bottom: 2px solid #222;
+}
+
+.inspiration-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 25px 30px;
+  margin-top: 30px;
+}
+
+.inspiration-item strong {
+  display: block;
+  font-size: 14px;
+  margin-bottom: 3px;
+}
+
+.inspiration-item span {
+  color: #717171;
+  font-size: 13px;
+}
+
+.show-more {
+  margin-top: 28px;
+  background: transparent;
+  border: 0;
+  font-weight: 700;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+footer {
+  background: #f7f7f7;
+  border-top: 1px solid #ddd;
+}
+
+.footer-main {
+  max-width: var(--page);
+  margin: auto;
+  padding: 45px 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 40px;
+}
+
+.footer-col h3 {
+  font-size: 14px;
+  margin: 0 0 17px;
+}
+
+.footer-col a {
+  display: block;
+  color: #333;
+  margin: 13px 0;
+  font-size: 14px;
+}
+
+.footer-col a:hover {
+  text-decoration: underline;
+}
+
+.footer-bottom {
+  max-width: var(--page);
+  margin: auto;
+  border-top: 1px solid #ddd;
+  min-height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 25px;
+}
+
+.footer-bottom-left,
+.footer-bottom-right {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.footer-bottom a:hover {
+  text-decoration: underline;
+}
+
+.social {
+  font-weight: 700;
+  font-size: 16px;
+}
+
+/* =========================================================
+   MENU
+========================================================= */
+
+.menu {
+  position: absolute;
+  right: 32px;
+  top: 70px;
+  width: 245px;
+  background: white;
+  box-shadow: 0 6px 25px rgba(0,0,0,.16);
+  border-radius: 13px;
+  padding: 8px 0;
+  z-index: 200;
+}
+
+.menu button,
+.menu a {
+  display: block;
+  width: 100%;
+  padding: 13px 16px;
+  text-align: left;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.menu button:hover,
+.menu a:hover {
+  background: #f7f7f7;
+}
+
+.menu-divider {
+  border-top: 1px solid #ddd;
+  margin: 5px 0;
+}
+
+/* =========================================================
+   MODAL
+========================================================= */
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 500;
+  background: rgba(0,0,0,.38);
+  display: grid;
+  place-items: center;
+  padding: 20px;
+}
+
+.modal {
+  background: white;
+  width: min(560px, 100%);
+  max-height: 90vh;
+  overflow-y: auto;
+  border-radius: 18px;
+  box-shadow: 0 12px 50px rgba(0,0,0,.25);
+}
+
+.modal.large {
+  width: min(960px, 100%);
+}
+
+.modal-head {
+  height: 64px;
+  border-bottom: 1px solid #eee;
+  display: flex;
+  align-items: center;
+  padding: 0 22px;
+}
+
+.modal-close {
+  width: 34px;
+  height: 34px;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  font-size: 22px;
+  cursor: pointer;
+}
+
+.modal-close:hover {
+  background: #f2f2f2;
+}
+
+.modal-head strong {
+  margin: auto;
+  transform: translateX(-17px);
+}
+
+.modal-body {
+  padding: 25px;
+}
+
+.modal-body h2 {
+  font-size: 22px;
+  margin-top: 0;
+}
+
+.login-input {
+  width: 100%;
+  padding: 16px;
+  border: 1px solid #aaa;
+  outline: none;
+}
+
+.login-input:first-of-type {
+  border-radius: 10px 10px 0 0;
+}
+
+.login-input + .login-input {
+  border-top: 0;
+  border-radius: 0 0 10px 10px;
+}
+
+.primary-btn {
+  width: 100%;
+  margin-top: 18px;
+  border: 0;
+  background: linear-gradient(90deg,#e61e4d,#d70466);
+  color: white;
+  padding: 14px;
+  border-radius: 9px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.demo-note {
+  margin-top: 14px;
+  color: #717171;
+  font-size: 12px;
+}
+
+/* =========================================================
+   DETAIL VIEW
+========================================================= */
+
+.detail-title {
+  font-size: 27px;
+  margin: 0 0 8px;
+}
+
+.detail-location {
+  text-decoration: underline;
+  font-weight: 600;
+}
+
+.detail-gallery {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 8px;
+  height: 400px;
+  margin: 24px 0;
+  overflow: hidden;
+  border-radius: 16px;
+}
+
+.detail-gallery img {
+  height: 100%;
+  object-fit: cover;
+}
+
+.detail-side {
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  gap: 8px;
+}
+
+.detail-layout {
+  display: grid;
+  grid-template-columns: 1fr 350px;
+  gap: 60px;
+}
+
+.detail-copy h3 {
+  font-size: 20px;
+}
+
+.detail-feature {
+  border-top: 1px solid #ddd;
+  padding: 22px 0;
+}
+
+.booking-box {
+  border: 1px solid #ddd;
+  border-radius: 14px;
+  padding: 22px;
+  box-shadow: 0 6px 20px rgba(0,0,0,.1);
+  height: fit-content;
+  position: sticky;
+  top: 20px;
+}
+
+.booking-price {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.booking-box .primary-btn {
+  margin-bottom: 12px;
+}
+
+.booking-note {
+  text-align: center;
+  color: #717171;
+  font-size: 12px;
+}
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+.toast {
+  position: fixed;
+  z-index: 999;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 12px 18px;
+  background: #222;
+  color: white;
+  border-radius: 10px;
+  box-shadow: 0 5px 20px rgba(0,0,0,.25);
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 1100px) {
+  :root {
+    --page: calc(100% - 48px);
+  }
+
+  .brand-word {
+    display: none;
+  }
+
+  .category-nav {
+    gap: 18px;
+  }
+
+  .card-row {
+    grid-auto-columns: calc((100% - 36px) / 4);
+  }
+
+  .results-grid {
+    grid-template-columns: repeat(3,1fr);
+  }
+
+  .inspiration-grid {
+    grid-template-columns: repeat(3,1fr);
+  }
+}
+
+@media (max-width: 767px) {
+  :root {
+    --page: calc(100% - 32px);
+  }
+
+  .header-shell {
+    border-bottom: 0;
+  }
+
+  .top-nav {
+    display: flex;
+    height: auto;
+    padding-top: 13px;
+    flex-direction: column;
+  }
+
+  .brand,
+  .nav-actions {
+    display: none;
+  }
+
+  .category-nav {
+    order: 2;
+    width: 100%;
+    height: 65px;
+    overflow-x: auto;
+    justify-content: flex-start;
+    gap: 26px;
+    scrollbar-width: none;
+  }
+
+  .category-btn {
+    min-width: 64px;
+  }
+
+  .category-btn.active::after {
+    bottom: 0;
+  }
+
+  .search-region {
+    order: 1;
+    width: 100%;
+    height: 68px;
+    padding-top: 0;
+  }
+
+  .search-bar {
+    width: 100%;
+    height: 54px;
+    display: flex;
+    padding: 0 7px 0 18px;
+  }
+
+  .search-section {
+    display: none;
+  }
+
+  .search-section:first-child {
+    display: block;
+    flex: 1;
+    height: auto;
+    padding: 0;
+    background: none;
+    box-shadow: none;
+  }
+
+  .search-section:first-child::after {
+    display: none;
+  }
+
+  .search-label {
+    font-size: 13px;
+  }
+
+  .search-value {
+    font-size: 12px;
+  }
+
+  .search-submit {
+    width: 40px;
+    height: 40px;
+  }
+
+  .search-popover {
+    position: fixed;
+    inset: auto 0 0 !important;
+    transform: none !important;
+    width: 100% !important;
+    max-height: 82vh;
+    border-radius: 24px 24px 0 0;
+    overflow: auto;
+  }
+
+  .calendars {
+    grid-template-columns: 1fr;
+  }
+
+  .calendar-month:nth-child(2) {
+    display: none;
+  }
+
+  .compact-header {
+    display: none;
+  }
+
+  main {
+    padding-top: 24px;
+  }
+
+  .discovery-intro h1 {
+    font-size: 23px;
+  }
+
+  .discovery-intro p {
+    font-size: 13px;
+  }
+
+  .section-title h2 {
+    font-size: 19px;
+  }
+
+  .carousel-actions {
+    display: none;
+  }
+
+  .card-row {
+    grid-auto-columns: 55%;
+    gap: 11px;
+    margin-right: -16px;
+  }
+
+  .image-wrap {
+    border-radius: 15px;
+  }
+
+  .results-grid {
+    grid-template-columns: repeat(2,1fr);
+    gap: 25px 10px;
+  }
+
+  .inspiration {
+    padding: 40px 16px;
+  }
+
+  .inspiration-grid {
+    grid-template-columns: repeat(2,1fr);
+    gap: 24px 15px;
+  }
+
+  .footer-main {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .footer-col {
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 20px;
+  }
+
+  .footer-bottom {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 22px 0;
+  }
+
+  .footer-bottom-left {
+    flex-wrap: wrap;
+  }
+
+  .detail-gallery {
+    height: 280px;
+    grid-template-columns: 1fr;
+  }
+
+  .detail-side {
+    display: none;
+  }
+
+  .detail-layout {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .booking-box {
+    position: static;
+  }
+
+  .modal-backdrop {
+    padding: 0;
+    align-items: end;
+  }
+
+  .modal,
+  .modal.large {
+    width: 100%;
+    border-radius: 20px 20px 0 0;
+    max-height: 94vh;
+  }
+}
+
+@media (max-width: 450px) {
+  .card-row {
+    grid-auto-columns: 61%;
+  }
+
+  .results-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    scroll-behavior: auto !important;
+    transition: none !important;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<!-- =======================================================
+     HEADER
+======================================================= -->
+
+<header class="header-shell">
+
+  <div class="top-nav">
+
+    <div class="brand" onclick="goHome()">
+      <svg class="brand-logo" viewBox="0 0 32 32" fill="none">
+        <path d="M16 3c-2.7 0-4.3 2.8-5.7 5.6L4.5 20c-1.5 3-1 5.8 1.1 7.1 2.5 1.5 5-.1 7-2.6L16 20l3.4 4.5c2 2.5 4.5 4.1 7 2.6 2.2-1.3 2.7-4.1 1.2-7.1L21.7 8.6C20.3 5.8 18.7 3 16 3Z"
+              stroke="currentColor" stroke-width="2.2"/>
+        <path d="M11.5 18.2c0-2.6 2-4.7 4.5-4.7s4.5 2.1 4.5 4.7-2 4.7-4.5 4.7-4.5-2.1-4.5-4.7Z"
+              stroke="currentColor" stroke-width="2.2"/>
+      </svg>
+
+      <span class="brand-word">airbnb</span>
+    </div>
+
+    <nav class="category-nav" id="categoryNav"></nav>
+
+    <div class="nav-actions">
+
+      <button class="host-btn" onclick="openHostModal()">
+        Become a host
+      </button>
+
+      <button class="circle-btn" onclick="openWishlist()" aria-label="Wishlist">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z"/>
+        </svg>
+      </button>
+
+      <button class="circle-btn" onclick="openLogin()" aria-label="Profile">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="8" r="4"/>
+          <path d="M4 21c.8-4.2 3.5-6.5 8-6.5s7.2 2.3 8 6.5"/>
+        </svg>
+      </button>
+
+      <button class="circle-btn" onclick="toggleMenu()" aria-label="Menu">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M4 7h16M4 12h16M4 17h16"/>
+        </svg>
+      </button>
+
+    </div>
+
+  </div>
+
+  <div class="search-region">
+
+    <div class="search-bar" id="searchBar">
+
+      <button class="search-section" onclick="toggleSearchPopover('destination',this)">
+        <div class="search-label">Where</div>
+        <div class="search-value" id="destinationValue">Search destinations</div>
+      </button>
+
+      <button class="search-section" onclick="toggleSearchPopover('dates',this)">
+        <div class="search-label">When</div>
+        <div class="search-value" id="dateValue">Add dates</div>
+      </button>
+
+      <button class="search-section" onclick="toggleSearchPopover('guests',this)">
+        <div class="search-label">Who</div>
+        <div class="search-value" id="guestValue">Add guests</div>
+      </button>
+
+      <button class="search-submit" onclick="performSearch()" aria-label="Search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <circle cx="11" cy="11" r="6"/>
+          <path d="m16 16 4 4"/>
+        </svg>
+      </button>
+
+      <!-- destination -->
+      <div id="destinationPopover" class="search-popover destination-popover hidden">
+        <input
+          class="destination-input"
+          id="destinationInput"
+          placeholder="Search destinations"
+          oninput="renderDestinationOptions()"
+        />
+        <div id="destinationList" class="destination-list"></div>
+      </div>
+
+      <!-- dates -->
+      <div id="datesPopover" class="search-popover date-popover hidden">
+        <div class="calendar-header">
+          <button class="calendar-arrow" onclick="shiftMonth(-1)">‹</button>
+          <span class="calendar-title">Choose your dates</span>
+          <button class="calendar-arrow" onclick="shiftMonth(1)">›</button>
+        </div>
+        <div class="calendars" id="calendars"></div>
+      </div>
+
+      <!-- guests -->
+      <div id="guestsPopover" class="search-popover guest-popover hidden">
+        <div id="guestRows"></div>
+      </div>
+
+    </div>
+
+  </div>
+
+</header>
+
+<!-- COMPACT HEADER -->
+
+<div class="compact-header" id="compactHeader">
+  <div class="compact-inner">
+
+    <div class="brand" onclick="goHome()">
+      <svg class="brand-logo" viewBox="0 0 32 32" fill="none">
+        <path d="M16 3c-2.7 0-4.3 2.8-5.7 5.6L4.5 20c-1.5 3-1 5.8 1.1 7.1 2.5 1.5 5-.1 7-2.6L16 20l3.4 4.5c2 2.5 4.5 4.1 7 2.6 2.2-1.3 2.7-4.1 1.2-7.1L21.7 8.6C20.3 5.8 18.7 3 16 3Z"
+              stroke="currentColor" stroke-width="2.2"/>
+      </svg>
+      <span class="brand-word">airbnb</span>
+    </div>
+
+    <button class="compact-search" onclick="scrollToTopSearch()">
+      <strong id="compactWhere">Anywhere</strong>
+      <span id="compactDate">Any week</span>
+      <span id="compactGuests">Add guests</span>
+
+      <div class="mini-search">
+        <svg width="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <circle cx="11" cy="11" r="6"/>
+          <path d="m16 16 4 4"/>
+        </svg>
+      </div>
+    </button>
+
+    <div class="nav-actions">
+      <button class="host-btn" onclick="openHostModal()">Become a host</button>
+      <button class="circle-btn" onclick="openLogin()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="8" r="4"/>
+          <path d="M4 21c.8-4.2 3.5-6.5 8-6.5s7.2 2.3 8 6.5"/>
+        </svg>
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<!-- MENU -->
+
+<div id="menu" class="menu hidden">
+  <button onclick="openLogin()"><strong>Log in or sign up</strong></button>
+  <div class="menu-divider"></div>
+  <button onclick="openHostModal()">Become a host</button>
+  <button onclick="toast('Demo: Refer a host')">Refer a host</button>
+  <button onclick="toast('Demo: Find a co-host')">Find a co-host</button>
+  <a href="https://www.airbnb.com/help" target="_blank" rel="noopener">Help Centre</a>
+</div>
+
+<!-- =======================================================
+     MAIN
+======================================================= -->
+
+<main id="main">
+  <div class="content" id="content"></div>
+</main>
+
+<!-- =======================================================
+     INSPIRATION
+======================================================= -->
+
+<section class="inspiration" id="inspiration">
+  <div class="inspiration-inner">
+    <h2>Inspiration for future getaways</h2>
+    <div class="inspiration-tabs" id="inspirationTabs"></div>
+    <div class="inspiration-grid" id="inspirationGrid"></div>
+    <button class="show-more" id="showMoreBtn" onclick="toggleInspirationMore()">
+      Show more⌄
+    </button>
+  </div>
+</section>
+
+<!-- =======================================================
+     FOOTER
+======================================================= -->
+
+<footer id="footer">
+
+  <div class="footer-main">
+
+    <div class="footer-col">
+      <h3>Support</h3>
+      <a href="https://www.airbnb.com/help" target="_blank">Help Centre</a>
+      <a href="https://www.airbnb.com/help/article/3218" target="_blank">Get help with a safety issue</a>
+      <a href="https://www.airbnb.com/aircover" target="_blank">AirCover</a>
+      <a href="https://www.airbnb.com/against-discrimination" target="_blank">Anti-discrimination</a>
+      <a href="https://www.airbnb.com/accessibility" target="_blank">Disability support</a>
+      <a href="https://www.airbnb.com/help/article/2701" target="_blank">Cancellation options</a>
+      <a href="https://www.airbnb.com/neighbors" target="_blank">Report neighbourhood concern</a>
+    </div>
+
+    <div class="footer-col">
+      <h3>Hosting</h3>
+      <a href="https://www.airbnb.com/host/homes" target="_blank">Airbnb your home</a>
+      <a href="https://www.airbnb.com/host/experiences" target="_blank">Airbnb your experience</a>
+      <a href="https://www.airbnb.com/host/services" target="_blank">Airbnb your service</a>
+      <a href="https://www.airbnb.com/aircover-for-hosts" target="_blank">AirCover for Hosts</a>
+      <a href="https://www.airbnb.com/resources/hosting-homes" target="_blank">Hosting resources</a>
+      <a href="https://community.withairbnb.com" target="_blank">Community forum</a>
+      <a href="https://www.airbnb.com/help/responsible-hosting" target="_blank">Hosting responsibly</a>
+      <a href="https://www.airbnb.com/host" target="_blank">Join a free hosting class</a>
+      <a href="https://www.airbnb.com/host/co-hosts" target="_blank">Find a co-host</a>
+      <a href="https://www.airbnb.com/host" target="_blank">Refer a host</a>
+    </div>
+
+    <div class="footer-col">
+      <h3>Airbnb</h3>
+      <a href="https://www.airbnb.com/release" target="_blank">2026 Summer Release</a>
+      <a href="https://news.airbnb.com" target="_blank">Newsroom</a>
+      <a href="https://careers.airbnb.com" target="_blank">Careers</a>
+      <a href="https://investors.airbnb.com" target="_blank">Investors</a>
+      <a href="https://www.airbnb.org" target="_blank">Airbnb.org emergency stays</a>
+    </div>
+
+  </div>
+
+  <div class="footer-bottom">
+
+    <div class="footer-bottom-left">
+      <span>© 2026 Airbnb, Inc.</span>
+      <span>·</span>
+      <a href="https://www.airbnb.com/help/article/2855" target="_blank">Privacy</a>
+      <span>·</span>
+      <a href="https://www.airbnb.com/help/article/2908" target="_blank">Terms</a>
+      <span>·</span>
+      <a href="https://www.airbnb.com/about/company-details" target="_blank">Company details</a>
+    </div>
+
+    <div class="footer-bottom-right">
+      <button class="host-btn" onclick="openLanguage()">◎ English (IN)</button>
+      <button class="host-btn" onclick="openLanguage()">₹ INR</button>
+      <span class="social">f</span>
+      <span class="social">◎</span>
+      <span class="social">𝕏</span>
+    </div>
+
+  </div>
+
+</footer>
+
+<div id="modalRoot"></div>
+<div id="toastRoot"></div>
+
+<script>
+/* =========================================================
+   HELPERS
+========================================================= */
+
+const $ = selector => document.querySelector(selector);
+const $$ = selector => [...document.querySelectorAll(selector)];
+
+const money = n =>
+  new Intl.NumberFormat("en-IN").format(n);
+
+function unsplash(id, width = 700) {
+  return `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${width}&q=80`;
+}
+
+/* =========================================================
+   CLOUD IMAGE POOL
+========================================================= */
+
+const homeImages = [
+  "photo-1600607687939-ce8a6c25118c",
+  "photo-1600566753190-17f0baa2a6c3",
+  "photo-1600585154340-be6161a56a0c",
+  "photo-1600047509807-ba8f99d2cdde",
+  "photo-1600607687920-4e2a09cf159d",
+  "photo-1600566753086-00f18fb6b3ea",
+  "photo-1600573472592-401b489a3cdc",
+  "photo-1600607688969-a5bfcd646154",
+  "photo-1600585154526-990dced4db0d",
+  "photo-1600566752355-35792bedcfea",
+  "photo-1613490493576-7fde63acd811",
+  "photo-1600607688960-e095ff83135c",
+  "photo-1600047508788-786f3865b4b9",
+  "photo-1600585152915-d208bec867a1",
+  "photo-1600210492486-724fe5c67fb0",
+  "photo-1600566753051-f0b89df2dd90",
+  "photo-1600607688066-890987f18a86",
+  "photo-1600566752229-250ed79470d8"
+];
+
+const experienceImages = [
+  "photo-1504674900247-0877df9cc836",
+  "photo-1517248135467-4c7edcad34c4",
+  "photo-1547592180-85f173990554",
+  "photo-1515003197210-e0cd71810b5f",
+  "photo-1528605248644-14dd04022da1",
+  "photo-1476514525535-07fb3b4ae5f1",
+  "photo-1507525428034-b723cf961d3e",
+  "photo-1528181304800-259b08848526",
+  "photo-1528360983277-13d401cdc186",
+  "photo-1499856871958-5b9627545d1a",
+  "photo-1516483638261-f4dbaf036963",
+  "photo-1533105079780-92b9be482077"
+];
+
+const serviceImages = [
+  "photo-1556761175-b413da4baf72",
+  "photo-1556910103-1c02745aae4d",
+  "photo-1524504388940-b1c1722653e1",
+  "photo-1544161515-4ab6ce6db874",
+  "photo-1571019613454-1cb2f99b2d8b",
+  "photo-1560066984-138dadb4c035",
+  "photo-1556761175-4b46a572b786",
+  "photo-1556742049-0cfed4f6a45d",
+  "photo-1573497019940-1c28c88b4f3e"
+];
+
+/* =========================================================
+   CATEGORY ICONS
+========================================================= */
+
+const icons = {
+  all: `
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+    <circle cx="12" cy="12" r="9"/>
+    <path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"/>
+  </svg>`,
+
+  homes: `
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+    <path d="M3 11 12 4l9 7v9H3Z"/>
+    <path d="M9 20v-6h6v6"/>
+  </svg>`,
+
+  experiences: `
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+    <path d="M12 3c4 0 7 3.2 7 7.1 0 3.2-2.1 5.6-5 6.6L12 21l-2-4.3c-2.9-1-5-3.4-5-6.6C5 6.2 8 3 12 3Z"/>
+    <path d="M8 9c1.1.8 2.4 1.2 4 1.2S14.9 9.8 16 9"/>
+  </svg>`,
+
+  services: `
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+    <path d="M4 15h16M6 15a6 6 0 0 1 12 0"/>
+    <path d="M12 7V5M3 18h18"/>
+  </svg>`
+};
+
+/* =========================================================
+   DATA GENERATION
+========================================================= */
+
+const destinations = [
+  {
+    name:"South Goa",
+    desc:"Beaches, villas and relaxed coastal stays",
+    img: unsplash("photo-1512343879784-a960bf40e7f2")
+  },
+  {
+    name:"North Goa",
+    desc:"Beach clubs, cafés and coastal homes",
+    img: unsplash("photo-1507525428034-b723cf961d3e")
+  },
+  {
+    name:"Hyderabad",
+    desc:"Historic neighbourhoods and city stays",
+    img: unsplash("photo-1572431447238-425af66a273b")
+  },
+  {
+    name:"Bengaluru",
+    desc:"Food, culture and urban escapes",
+    img: unsplash("photo-1596176530529-78163a4f7af2")
+  },
+  {
+    name:"Mumbai",
+    desc:"Sea views and vibrant city neighbourhoods",
+    img: unsplash("photo-1529253355930-ddbe423a2ac7")
+  },
+  {
+    name:"New Delhi",
+    desc:"History, markets and modern stays",
+    img: unsplash("photo-1587474260584-136574528ed5")
+  },
+  {
+    name:"Puducherry",
+    desc:"French Quarter and peaceful seaside streets",
+    img: unsplash("photo-1582510003544-4d00b7f74220")
+  },
+  {
+    name:"Dubai",
+    desc:"Architecture, beaches and desert escapes",
+    img: unsplash("photo-1512453979798-5ea266f8880c")
+  },
+  {
+    name:"Bangkok",
+    desc:"Street food and vibrant neighbourhoods",
+    img: unsplash("photo-1508009603885-50cf7c579365")
+  },
+  {
+    name:"Kuala Lumpur",
+    desc:"Food, skyline and tropical city breaks",
+    img: unsplash("photo-1596422846543-75c6fc197f07")
+  },
+  {
+    name:"Tokyo",
+    desc:"Neighbourhoods, food and design",
+    img: unsplash("photo-1540959733332-eab4deabeeaf")
+  }
+];
+
+const homeLocations = [
+  ["South Goa","Villa"],
+  ["Hyderabad","Flat"],
+  ["Puducherry","Guest house"],
+  ["New Delhi","Apartment"],
+  ["Mumbai","Sea-view flat"],
+  ["Bengaluru","Loft"],
+  ["North Goa","Beach house"],
+  ["South Goa","Cottage"]
+];
+
+const homeNames = [
+  "Palm Grove Retreat",
+  "Casa Serena",
+  "The Courtyard House",
+  "Sea Breeze Villa",
+  "Skyline Residence",
+  "The Garden Loft",
+  "Coconut Grove",
+  "Azure House",
+  "The White Villa",
+  "Heritage Hideaway",
+  "Sunset Studio",
+  "Coastal Haven"
+];
+
+const homes = Array.from({length:64}, (_,i) => {
+  const [location,type] = homeLocations[i % homeLocations.length];
+
+  return {
+    id:`home-${i}`,
+    category:"homes",
+    type,
+    location,
+    title:`${type} in ${location}`,
+    name:homeNames[i % homeNames.length],
+    image:unsplash(homeImages[i % homeImages.length]),
+    price:3200 + ((i * 683) % 10500),
+    rating:(4.70 + ((i*3)%28)/100).toFixed(2),
+    favourite:i % 3 === 0,
+    description:
+      `A thoughtfully designed ${type.toLowerCase()} offering a comfortable stay in ${location}. Enjoy stylish interiors, peaceful spaces and easy access to nearby attractions.`,
+    guests:2 + (i % 6),
+    bedrooms:1 + (i % 4),
+    beds:1 + (i % 5)
+  };
+});
+
+const experienceTitles = [
+  ["Old Delhi street food walk","New Delhi"],
+  ["Pottery workshop","Bengaluru"],
+  ["Sunset kayaking","Goa"],
+  ["Neighbourhood photography walk","Tokyo"],
+  ["Authentic Thai cooking class","Bangkok"],
+  ["Desert stargazing","Dubai"],
+  ["Heritage cycling tour","Puducherry"],
+  ["Mumbai night food trail","Mumbai"],
+  ["Coffee tasting experience","Bengaluru"],
+  ["Goan cooking experience","Goa"],
+  ["Old city architecture walk","Hyderabad"],
+  ["Traditional art workshop","New Delhi"],
+  ["Hidden cafés of Tokyo","Tokyo"],
+  ["Bangkok canal exploration","Bangkok"],
+  ["Desert photography session","Dubai"],
+  ["Surfing introduction","Goa"],
+  ["Local market tour","Kuala Lumpur"],
+  ["Street photography masterclass","Mumbai"]
+];
+
+const experiences = experienceTitles.map((x,i)=>({
+  id:`exp-${i}`,
+  category:"experiences",
+  title:x[0],
+  location:x[1],
+  image:unsplash(experienceImages[i % experienceImages.length]),
+  price:900 + (i*317)%3600,
+  rating:(4.72+(i%25)/100).toFixed(2),
+  duration:`${2 + i%4} hours`,
+  favourite:i%4===0,
+  description:
+    `Discover ${x[1]} through a memorable local experience hosted by someone who knows the city deeply.`
+}));
+
+const serviceTitles = [
+  ["Vacation photographer","Photography"],
+  ["Private chef at your stay","Chefs"],
+  ["Celebration catering","Catering"],
+  ["Relaxing in-home massage","Massage"],
+  ["Personal fitness session","Personal training"],
+  ["Hair & makeup artist","Beauty and wellness"],
+  ["Family portrait photographer","Photography"],
+  ["Regional Indian private chef","Chefs"],
+  ["Brunch catering","Catering"],
+  ["Deep tissue massage","Massage"],
+  ["Yoga and mobility coach","Personal training"],
+  ["Bridal beauty session","Beauty and wellness"],
+  ["Travel photography session","Photography"],
+  ["Chef's tasting menu","Chefs"],
+  ["Event catering service","Catering"],
+  ["Wellness massage","Massage"],
+  ["Strength coaching","Personal training"],
+  ["Professional styling","Beauty and wellness"]
+];
+
+const serviceLocations = [
+  "Goa","Mumbai","Bengaluru","New Delhi","Hyderabad","Puducherry"
+];
+
+const services = serviceTitles.map((x,i)=>({
+  id:`service-${i}`,
+  category:"services",
+  title:x[0],
+  serviceType:x[1],
+  location:serviceLocations[i % serviceLocations.length],
+  image:unsplash(serviceImages[i % serviceImages.length]),
+  price:1500 + (i*513)%6500,
+  rating:(4.75+(i%22)/100).toFixed(2),
+  favourite:i%5===0,
+  description:
+    `${x[1]} provided at your stay by a highly rated local professional.`
+}));
+
+/* =========================================================
+   STATE
+========================================================= */
+
+let activeCategory = "all";
+
+let saved = new Set(
+  JSON.parse(localStorage.getItem("staybnbSaved") || "[]")
+);
+
+let searchState = {
+  destination:"",
+  start:null,
+  end:null,
+  guests:{
+    adults:0,
+    children:0,
+    infants:0,
+    pets:0
+  }
+};
+
+let activePopover = null;
+let monthOffset = 0;
+let inspirationTab = "Popular";
+let inspirationExpanded = false;
+
+/* =========================================================
+   NAVIGATION
+========================================================= */
+
+const categories = [
+  ["all","All"],
+  ["homes","Homes"],
+  ["experiences","Experiences"],
+  ["services","Services"]
+];
+
+function renderCategories() {
+
+  $("#categoryNav").innerHTML = categories.map(([key,label]) => `
+    <button
+      class="category-btn ${activeCategory===key?"active":""}"
+      onclick="setCategory('${key}')"
+    >
+      <div class="category-icon">${icons[key]}</div>
+      <div>${label}</div>
+    </button>
+  `).join("");
+}
+
+function setCategory(category) {
+  activeCategory = category;
+  closeSearchPopovers();
+  renderCategories();
+  renderHome();
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+/* =========================================================
+   SEARCH DESTINATIONS
+========================================================= */
+
+function renderDestinationOptions() {
+
+  const q = ($("#destinationInput")?.value || "").toLowerCase();
+
+  const filtered = destinations.filter(x =>
+    x.name.toLowerCase().includes(q) ||
+    x.desc.toLowerCase().includes(q)
+  );
+
+  $("#destinationList").innerHTML = filtered.map(x => `
+    <div class="destination-option" onclick="selectDestination('${x.name.replaceAll("'","\\'")}')">
+
+      <img
+        class="destination-thumb"
+        src="${x.img}"
+        alt=""
+      />
+
+      <div>
+        <div class="destination-name">${x.name}</div>
+        <div class="destination-description">${x.desc}</div>
+      </div>
+
+    </div>
+  `).join("");
+}
+
+function selectDestination(name) {
+
+  searchState.destination = name;
+
+  $("#destinationValue").textContent = name;
+  $("#compactWhere").textContent = name;
+
+  closeSearchPopovers();
+}
+
+/* =========================================================
+   SEARCH POPOVERS
+========================================================= */
+
+function toggleSearchPopover(type, button) {
+
+  const map = {
+    destination:"#destinationPopover",
+    dates:"#datesPopover",
+    guests:"#guestsPopover"
+  };
+
+  if(activePopover === type) {
+    closeSearchPopovers();
+    return;
+  }
+
+  closeSearchPopovers();
+
+  activePopover = type;
+
+  const popover = $(map[type]);
+  popover.classList.remove("hidden");
+
+  button.classList.add("active");
+
+  if(type==="destination") {
+    renderDestinationOptions();
+    setTimeout(()=>$("#destinationInput").focus(),20);
+  }
+
+  if(type==="dates") {
+    renderCalendars();
+  }
+
+  if(type==="guests") {
+    renderGuestPicker();
+  }
+}
+
+function closeSearchPopovers() {
+  $$(".search-popover").forEach(x=>x.classList.add("hidden"));
+  $$(".search-section").forEach(x=>x.classList.remove("active"));
+  activePopover = null;
+}
+
+/* =========================================================
+   GUEST PICKER
+========================================================= */
+
+const guestTypes = [
+  ["adults","Adults","Ages 13 or above"],
+  ["children","Children","Ages 2–12"],
+  ["infants","Infants","Under 2"],
+  ["pets","Pets","Bringing a service animal?"]
+];
+
+function renderGuestPicker() {
+
+  $("#guestRows").innerHTML = guestTypes.map(([key,label,desc]) => {
+
+    const count = searchState.guests[key];
+
+    return `
+      <div class="guest-row">
+
+        <div>
+          <div class="guest-title">${label}</div>
+          <div class="guest-desc">${desc}</div>
+        </div>
+
+        <div class="counter">
+
+          <button
+            ${count===0?"disabled":""}
+            onclick="changeGuest('${key}',-1)"
+          >−</button>
+
+          <span>${count}</span>
+
+          <button onclick="changeGuest('${key}',1)">+</button>
+
+        </div>
+
+      </div>
+    `;
+  }).join("");
+}
+
+function changeGuest(type, delta) {
+
+  searchState.guests[type] =
+    Math.max(0,searchState.guests[type]+delta);
+
+  renderGuestPicker();
+  updateGuestSummary();
+}
+
+function updateGuestSummary() {
+
+  const main =
+    searchState.guests.adults +
+    searchState.guests.children;
+
+  const extras = [];
+
+  if(searchState.guests.infants)
+    extras.push(`${searchState.guests.infants} infant${searchState.guests.infants>1?"s":""}`);
+
+  if(searchState.guests.pets)
+    extras.push(`${searchState.guests.pets} pet${searchState.guests.pets>1?"s":""}`);
+
+  let value = "Add guests";
+
+  if(main) {
+    value = `${main} guest${main>1?"s":""}`;
+  }
+
+  if(extras.length) {
+    value += `${main?", ":""}${extras.join(", ")}`;
+  }
+
+  $("#guestValue").textContent = value;
+  $("#compactGuests").textContent = main ? `${main} guests` : "Add guests";
+}
+
+/* =========================================================
+   CALENDAR
+========================================================= */
+
+function renderCalendars() {
+
+  const base = new Date();
+  base.setDate(1);
+  base.setMonth(base.getMonth()+monthOffset);
+
+  const second = new Date(base);
+  second.setMonth(second.getMonth()+1);
+
+  $("#calendars").innerHTML =
+    renderMonth(base) +
+    renderMonth(second);
+}
+
+function renderMonth(date) {
+
+  const year = date.getFullYear();
+  const month = date.getMonth();
+
+  const firstDay = new Date(year,month,1).getDay();
+  const days = new Date(year,month+1,0).getDate();
+
+  const monthName =
+    date.toLocaleDateString("en-IN",{
+      month:"long",
+      year:"numeric"
+    });
+
+  const blanks =
+    Array.from({length:firstDay},()=>`<span></span>`).join("");
+
+  let cells = "";
+
+  for(let d=1;d<=days;d++) {
+
+    const current = new Date(year,month,d);
+    current.setHours(0,0,0,0);
+
+    const key = current.toISOString().slice(0,10);
+
+    const selected =
+      key===searchState.start ||
+      key===searchState.end;
+
+    cells += `
+      <button
+        class="day ${selected?"selected":""}"
+        onclick="selectDate('${key}')"
+      >${d}</button>
+    `;
+  }
+
+  return `
+    <div class="calendar-month">
+
+      <div class="month-name">${monthName}</div>
+
+      <div class="calendar-grid">
+
+        ${["Su","Mo","Tu","We","Th","Fr","Sa"]
+          .map(x=>`<span class="day-name">${x}</span>`)
+          .join("")}
+
+        ${blanks}
+        ${cells}
+
+      </div>
+
+    </div>
+  `;
+}
+
+function selectDate(key) {
+
+  if(!searchState.start || searchState.end) {
+    searchState.start = key;
+    searchState.end = null;
+  } else {
+    if(key < searchState.start) {
+      searchState.end = searchState.start;
+      searchState.start = key;
+    } else {
+      searchState.end = key;
+    }
+  }
+
+  updateDateSummary();
+  renderCalendars();
+}
+
+function shiftMonth(delta) {
+  monthOffset += delta;
+  renderCalendars();
+}
+
+function updateDateSummary() {
+
+  if(!searchState.start) {
+    $("#dateValue").textContent = "Add dates";
+    $("#compactDate").textContent = "Any week";
+    return;
+  }
+
+  const format = x =>
+    new Date(x+"T12:00:00").toLocaleDateString("en-IN",{
+      day:"numeric",
+      month:"short"
+    });
+
+  let value = format(searchState.start);
+
+  if(searchState.end)
+    value += ` – ${format(searchState.end)}`;
+
+  $("#dateValue").textContent = value;
+  $("#compactDate").textContent = value;
+}
+
+/* =========================================================
+   CARDS
+========================================================= */
+
+function toggleSaved(event,id) {
+
+  event.stopPropagation();
+
+  if(saved.has(id))
+    saved.delete(id);
+  else
+    saved.add(id);
+
+  localStorage.setItem(
+    "staybnbSaved",
+    JSON.stringify([...saved])
+  );
+
+  renderHome();
+}
+
+function cardHTML(item) {
+
+  const isSaved = saved.has(item.id);
+
+  let meta = "";
+
+  if(item.category==="homes") {
+    meta =
+      `₹${money(item.price)} for 2 nights · ★ ${item.rating}`;
+  }
+
+  if(item.category==="experiences") {
+    meta =
+      `From ₹${money(item.price)} / guest · ★ ${item.rating}`;
+  }
+
+  if(item.category==="services") {
+    meta =
+      `From ₹${money(item.price)} / session · ★ ${item.rating}`;
+  }
+
+  let subtitle = item.location;
+
+  if(item.category==="experiences")
+    subtitle = `${item.location} · ${item.duration}`;
+
+  if(item.category==="services")
+    subtitle = `${item.location} · ${item.serviceType}`;
+
+  return `
+    <article class="card" onclick="openDetail('${item.id}')">
+
+      <div class="image-wrap">
+
+        <img
+          src="${item.image}"
+          alt="${item.title}"
+          loading="lazy"
+          onerror="this.src='https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=700&q=70'"
+        />
+
+        ${item.favourite
+          ? `<span class="badge">Guest favourite</span>`
+          : ""
+        }
+
+        <button
+          class="heart ${isSaved?"saved":""}"
+          onclick="toggleSaved(event,'${item.id}')"
+          aria-label="Save ${item.title}"
+        >
+
+          <svg viewBox="0 0 24 24">
+            <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z"/>
+          </svg>
+
+        </button>
+
+      </div>
+
+      <div class="card-info">
+
+        <div class="card-title">${item.title}</div>
+        <div class="card-subtitle">${subtitle}</div>
+        <div class="card-meta">${meta}</div>
+
+      </div>
+
+    </article>
+  `;
+}
+
+/* =========================================================
+   CAROUSELS
+========================================================= */
+
+function sectionHTML(title,items,id) {
+
+  return `
+    <section class="listing-section">
+
+      <div class="section-header">
+
+        <div class="section-title">
+          <h2>${title}</h2>
+
+          <button
+            class="section-more"
+            onclick="showSectionResults('${id}')"
+          >›</button>
+        </div>
+
+        <div class="carousel-actions">
+
+          <button
+            class="carousel-btn"
+            onclick="scrollCarousel('${id}',-1)"
+          >‹</button>
+
+          <button
+            class="carousel-btn"
+            onclick="scrollCarousel('${id}',1)"
+          >›</button>
+
+        </div>
+
+      </div>
+
+      <div class="card-row" id="${id}">
+        ${items.map(cardHTML).join("")}
+      </div>
+
+    </section>
+  `;
+}
+
+function scrollCarousel(id,direction) {
+
+  const el = document.getElementById(id);
+
+  el.scrollBy({
+    left: direction * el.clientWidth * .75,
+    behavior:"smooth"
+  });
+}
+
+function showSectionResults(id) {
+
+  const row = document.getElementById(id);
+
+  if(row)
+    row.scrollBy({
+      left:row.clientWidth*.8,
+      behavior:"smooth"
+    });
+}
+
+/* =========================================================
+   HOME PAGE
+========================================================= */
+
+function renderHome() {
+
+  $("#inspiration").classList.remove("hidden");
+  $("#footer").classList.remove("hidden");
+
+  if(activeCategory==="homes")
+    renderHomesPage();
+
+  else if(activeCategory==="experiences")
+    renderExperiencesPage();
+
+  else if(activeCategory==="services")
+    renderServicesPage();
+
+  else
+    renderAllPage();
+}
+
+function renderAllPage() {
+
+  $("#content").innerHTML = `
+
+    <div class="discovery-intro">
+      <div>
+        <h1>Explore your next stay</h1>
+        <p>Homes, experiences and services for your next trip.</p>
+      </div>
+    </div>
+
+    ${sectionHTML(
+      "Popular homes in South Goa",
+      homes.filter(x=>x.location==="South Goa").slice(0,8),
+      "all-goa"
+    )}
+
+    ${sectionHTML(
+      "Experiences guests love",
+      experiences.slice(0,10),
+      "all-experiences"
+    )}
+
+    ${sectionHTML(
+      "Services for your stay",
+      services.slice(0,10),
+      "all-services"
+    )}
+
+    ${sectionHTML(
+      "Places to stay in Hyderabad",
+      homes.filter(x=>x.location==="Hyderabad").slice(0,8),
+      "all-hyd"
+    )}
+
+    ${destinationSection()}
+
+  `;
+}
+
+function renderHomesPage() {
+
+  const sections = [
+    ["Popular homes in South Goa","South Goa"],
+    ["Places to stay in Hyderabad","Hyderabad"],
+    ["Popular homes in Puducherry","Puducherry"],
+    ["Popular homes in New Delhi","New Delhi"],
+    ["Homes in Mumbai","Mumbai"],
+    ["Weekend stays in Bengaluru","Bengaluru"],
+    ["Beachfront stays in North Goa","North Goa"]
+  ];
+
+  $("#content").innerHTML = `
+
+    <div class="discovery-intro">
+      <div>
+        <h1>Homes</h1>
+        <p>Discover stays for every kind of trip.</p>
+      </div>
+    </div>
+
+    ${sections.map(([title,location],i)=>
+      sectionHTML(
+        title,
+        homes.filter(x=>x.location===location).slice(0,8),
+        `home-row-${i}`
+      )
+    ).join("")}
+
+    ${destinationSection()}
+
+  `;
+}
+
+function renderExperiencesPage() {
+
+  $("#content").innerHTML = `
+
+    <div class="discovery-intro">
+      <div>
+        <h1>Experiences</h1>
+        <p>Activities hosted by local experts.</p>
+      </div>
+    </div>
+
+    ${sectionHTML(
+      "Popular experiences near you",
+      experiences.slice(0,8),
+      "exp-pop"
+    )}
+
+    ${sectionHTML(
+      "Food and drink experiences",
+      experiences.filter((_,i)=>[0,4,5,8,9,13].includes(i)),
+      "exp-food"
+    )}
+
+    ${sectionHTML(
+      "Art and culture",
+      experiences.filter((_,i)=>[1,3,6,10,11,12].includes(i)),
+      "exp-art"
+    )}
+
+    ${sectionHTML(
+      "Outdoor adventures",
+      experiences.filter((_,i)=>[2,5,6,15,16].includes(i)),
+      "exp-outdoor"
+    )}
+
+  `;
+}
+
+function renderServicesPage() {
+
+  const types = [
+    "Photography",
+    "Chefs",
+    "Catering",
+    "Massage",
+    "Personal training",
+    "Beauty and wellness"
+  ];
+
+  $("#content").innerHTML = `
+
+    <div class="discovery-intro">
+      <div>
+        <h1>Services</h1>
+        <p>Book trusted professionals for your stay.</p>
+      </div>
+    </div>
+
+    ${types.map((type,i)=>
+      sectionHTML(
+        type,
+        services.filter(x=>x.serviceType===type),
+        `service-${i}`
+      )
+    ).join("")}
+
+  `;
+}
+
+/* =========================================================
+   DESTINATION CARDS
+========================================================= */
+
+const destinationCards = [
+  ["Dubai","Modern city escapes","photo-1512453979798-5ea266f8880c"],
+  ["Bangkok","Food, markets and culture","photo-1508009603885-50cf7c579365"],
+  ["Kuala Lumpur","Tropical city adventures","photo-1596422846543-75c6fc197f07"],
+  ["Tokyo","Food, design and neighbourhoods","photo-1540959733332-eab4deabeeaf"],
+  ["Bali","Villas and island escapes","photo-1537996194471-e657df975ab4"],
+  ["Singapore","Food and modern city life","photo-1525625293386-3f8f99389edd"]
+];
+
+function destinationSection() {
+
+  return `
+    <section class="listing-section">
+
+      <div class="section-header">
+        <div class="section-title">
+          <h2>Destinations for you</h2>
+        </div>
+      </div>
+
+      <div class="card-row">
+
+        ${destinationCards.map(([name,desc,img])=>`
+
+          <article
+            class="card destination-card"
+            onclick="destinationSearch('${name}')"
+          >
+
+            <div class="image-wrap">
+              <img
+                src="${unsplash(img)}"
+                alt="${name}"
+                loading="lazy"
+              />
+            </div>
+
+            <div class="card-info">
+              <div class="card-title">${name}</div>
+              <div class="card-subtitle">${desc}</div>
+            </div>
+
+          </article>
+
+        `).join("")}
+
+      </div>
+
+    </section>
+  `;
+}
+
+function destinationSearch(name) {
+  searchState.destination = name;
+  $("#destinationValue").textContent = name;
+  $("#compactWhere").textContent = name;
+  performSearch();
+}
+
+/* =========================================================
+   SEARCH RESULTS
+========================================================= */
+
+function performSearch() {
+
+  closeSearchPopovers();
+
+  let pool =
+    activeCategory==="experiences"
+      ? experiences
+      : activeCategory==="services"
+      ? services
+      : activeCategory==="homes"
+      ? homes
+      : [...homes,...experiences,...services];
+
+  let results = pool;
+
+  if(searchState.destination) {
+
+    const q = searchState.destination.toLowerCase();
+
+    const filtered = pool.filter(x =>
+      x.location.toLowerCase().includes(q)
+    );
+
+    if(filtered.length)
+      results = filtered;
+  }
+
+  $("#inspiration").classList.add("hidden");
+
+  $("#content").innerHTML = `
+
+    <div class="results-header">
+
+      <h1>
+        ${searchState.destination
+          ? `Stays and activities in ${searchState.destination}`
+          : "Explore results"
+        }
+      </h1>
+
+      <div>
+        ${results.length} mock results
+      </div>
+
+      <div class="filter-chips">
+
+        <button class="chip">
+          ${searchState.destination || "Anywhere"}
+        </button>
+
+        <button class="chip">
+          ${$("#dateValue").textContent}
+        </button>
+
+        <button class="chip">
+          ${$("#guestValue").textContent}
+        </button>
+
+        <button class="chip">
+          ${activeCategory[0].toUpperCase()+activeCategory.slice(1)}
+        </button>
+
+      </div>
+
+    </div>
+
+    ${
+      results.length
+      ? `<div class="results-grid">
+          ${results.map(cardHTML).join("")}
+        </div>`
+      : `
+        <div style="padding:80px 0">
+          <h2>No exact matches</h2>
+          <p style="color:#717171">
+            Try changing your destination or filters.
+          </p>
+        </div>
+      `
+    }
+
+  `;
+
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+/* =========================================================
+   DETAILS
+========================================================= */
+
+function findItem(id) {
+  return [...homes,...experiences,...services]
+    .find(x=>x.id===id);
+}
+
+function openDetail(id) {
+
+  const item = findItem(id);
+
+  if(!item) return;
+
+  const extra1 =
+    item.category==="homes"
+      ? unsplash(homeImages[(Number(id.split("-")[1])+3)%homeImages.length])
+      : item.image;
+
+  const extra2 =
+    item.category==="homes"
+      ? unsplash(homeImages[(Number(id.split("-")[1])+7)%homeImages.length])
+      : item.image;
+
+  showModal(`
+
+    <div class="modal large">
+
+      <div class="modal-head">
+        <button class="modal-close" onclick="closeModal()">×</button>
+        <strong>${item.category==="homes"?"Stay details":"Details"}</strong>
+      </div>
+
+      <div class="modal-body">
+
+        <h2 class="detail-title">${item.title}</h2>
+
+        <div>
+          ★ ${item.rating}
+          &nbsp;·&nbsp;
+          <span class="detail-location">${item.location}</span>
+        </div>
+
+        <div class="detail-gallery">
+
+          <img src="${item.image}" alt="${item.title}"/>
+
+          <div class="detail-side">
+            <img src="${extra1}" alt=""/>
+            <img src="${extra2}" alt=""/>
+          </div>
+
+        </div>
+
+        <div class="detail-layout">
+
+          <div class="detail-copy">
+
+            <h3>
+              ${
+                item.category==="homes"
+                ? `${item.type} hosted in ${item.location}`
+                : item.title
+              }
+            </h3>
+
+            ${
+              item.category==="homes"
+              ? `<p>
+                  ${item.guests} guests ·
+                  ${item.bedrooms} bedrooms ·
+                  ${item.beds} beds
+                </p>`
+              : ""
+            }
+
+            <div class="detail-feature">
+              <strong>Guest favourite</strong>
+              <p>
+                One of the most loved options in this demo based
+                on ratings, reviews and reliability.
+              </p>
+            </div>
+
+            <div class="detail-feature">
+              <h3>About this ${item.category==="homes"?"place":"experience"}</h3>
+              <p>${item.description}</p>
+            </div>
+
+            <div class="detail-feature">
+              <h3>
+                ${item.category==="homes"
+                  ? "What this place offers"
+                  : "What's included"
+                }
+              </h3>
+
+              <p>
+                ✓ Highly rated host/provider<br>
+                ✓ Flexible mock booking<br>
+                ✓ Local recommendations<br>
+                ✓ Support during your reservation
+              </p>
+            </div>
+
+          </div>
+
+          <aside class="booking-box">
+
+            <div class="booking-price">
+              ₹${money(item.price)}
+              <span style="font-size:14px;font-weight:400">
+                ${item.category==="homes"?"/ night":"/ person"}
+              </span>
+            </div>
+
+            <p>★ ${item.rating} · Highly rated</p>
+
+            <button
+              class="primary-btn"
+              onclick="mockReserve('${item.id}')"
+            >
+              Reserve
+            </button>
+
+            <div class="booking-note">
+              This is a UI demonstration. You won't be charged.
+            </div>
+
+          </aside>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  `);
+}
+
+/* =========================================================
+   WISHLIST
+========================================================= */
+
+function openWishlist() {
+
+  const items =
+    [...homes,...experiences,...services]
+      .filter(x=>saved.has(x.id));
+
+  showModal(`
+
+    <div class="modal large">
+
+      <div class="modal-head">
+        <button class="modal-close" onclick="closeModal()">×</button>
+        <strong>Wishlist</strong>
+      </div>
+
+      <div class="modal-body">
+
+        <h2>Your saved favourites</h2>
+
+        ${
+          items.length
+          ? `
+            <div class="results-grid">
+              ${items.map(cardHTML).join("")}
+            </div>
+          `
+          : `
+            <div style="padding:45px 0">
+              <h3>Create your first wishlist</h3>
+              <p style="color:#717171">
+                Tap the heart on any home, experience or service
+                to save it here.
+              </p>
+            </div>
+          `
+        }
+
+      </div>
+
+    </div>
+
+  `);
+}
+
+/* =========================================================
+   LOGIN
+========================================================= */
+
+function openLogin() {
+
+  $("#menu").classList.add("hidden");
+
+  showModal(`
+
+    <div class="modal">
+
+      <div class="modal-head">
+        <button class="modal-close" onclick="closeModal()">×</button>
+        <strong>Log in or sign up</strong>
+      </div>
+
+      <div class="modal-body">
+
+        <h2>Welcome to Airbnb</h2>
+
+        <input
+          class="login-input"
+          placeholder="Country/Region"
+          value="India (+91)"
+        />
+
+        <input
+          class="login-input"
+          placeholder="Phone number"
+        />
+
+        <p style="font-size:12px;color:#717171">
+          We'll call or text you to confirm your number.
+          Standard message and data rates apply.
+        </p>
+
+        <button
+          class="primary-btn"
+          onclick="toast('Demo login only — no account was created.')"
+        >
+          Continue
+        </button>
+
+        <div class="demo-note">
+          Demo interface only. No real authentication is performed.
+        </div>
+
+      </div>
+
+    </div>
+
+  `);
+}
+
+/* =========================================================
+   HOST
+========================================================= */
+
+function openHostModal() {
+
+  $("#menu").classList.add("hidden");
+
+  showModal(`
+
+    <div class="modal">
+
+      <div class="modal-head">
+        <button class="modal-close" onclick="closeModal()">×</button>
+        <strong>Become a host</strong>
+      </div>
+
+      <div class="modal-body">
+
+        <h2>What would you like to host?</h2>
+
+        ${[
+          ["🏠","A home","Share a home guests will love"],
+          ["✦","An experience","Host an activity in your city"],
+          ["◉","A service","Offer professional services to guests"]
+        ].map(([icon,title,desc])=>`
+
+          <button
+            style="
+              width:100%;
+              border:1px solid #ddd;
+              background:white;
+              border-radius:14px;
+              padding:18px;
+              margin:7px 0;
+              text-align:left;
+              cursor:pointer;
+            "
+            onclick="toast('Demo host onboarding: ${title}')"
+          >
+
+            <div style="font-size:22px">${icon}</div>
+
+            <strong>${title}</strong>
+
+            <div style="color:#717171;margin-top:4px">
+              ${desc}
+            </div>
+
+          </button>
+
+        `).join("")}
+
+      </div>
+
+    </div>
+
+  `);
+}
+
+/* =========================================================
+   LANGUAGE
+========================================================= */
+
+function openLanguage() {
+
+  showModal(`
+
+    <div class="modal">
+
+      <div class="modal-head">
+        <button class="modal-close" onclick="closeModal()">×</button>
+        <strong>Language & currency</strong>
+      </div>
+
+      <div class="modal-body">
+
+        <h2>Choose a language</h2>
+
+        <button class="chip">English (IN)</button>
+        <button class="chip">हिन्दी</button>
+        <button class="chip">മലയാളം</button>
+
+        <h2 style="margin-top:30px">Choose currency</h2>
+
+        <button class="chip">₹ INR</button>
+        <button class="chip">$ USD — simulated</button>
+        <button class="chip">€ EUR — simulated</button>
+
+        <p class="demo-note">
+          Currency conversion is simulated and does not use live exchange rates.
+        </p>
+
+      </div>
+
+    </div>
+
+  `);
+}
+
+/* =========================================================
+   RESERVATION
+========================================================= */
+
+function mockReserve(id) {
+
+  const item = findItem(id);
+
+  showModal(`
+
+    <div class="modal">
+
+      <div class="modal-head">
+        <button class="modal-close" onclick="closeModal()">×</button>
+        <strong>Confirm and pay</strong>
+      </div>
+
+      <div class="modal-body">
+
+        <h2>Review your mock booking</h2>
+
+        <div style="display:flex;gap:16px;margin:20px 0">
+
+          <img
+            src="${item.image}"
+            style="
+              width:110px;
+              height:95px;
+              object-fit:cover;
+              border-radius:12px;
+            "
+          />
+
+          <div>
+            <strong>${item.title}</strong>
+            <div style="color:#717171;margin-top:5px">
+              ${item.location}
+            </div>
+            <div style="margin-top:7px">
+              ★ ${item.rating}
+            </div>
+          </div>
+
+        </div>
+
+        <div style="
+          border-top:1px solid #ddd;
+          border-bottom:1px solid #ddd;
+          padding:20px 0;
+        ">
+
+          <strong>Price details</strong>
+
+          <div style="
+            display:flex;
+            justify-content:space-between;
+            margin-top:13px;
+          ">
+            <span>Mock booking subtotal</span>
+            <span>₹${money(item.price)}</span>
+          </div>
+
+        </div>
+
+        <button
+          class="primary-btn"
+          onclick="mockConfirmation()"
+        >
+          Confirm mock reservation
+        </button>
+
+        <p class="booking-note">
+          No payment information is collected.
+        </p>
+
+      </div>
+
+    </div>
+
+  `);
+}
+
+function mockConfirmation() {
+
+  showModal(`
+
+    <div class="modal">
+
+      <div class="modal-body" style="text-align:center;padding:55px 30px">
+
+        <div style="font-size:45px">✓</div>
+
+        <h2>Mock reservation confirmed</h2>
+
+        <p style="color:#717171">
+          This confirmation exists only inside the demo.
+          No real Airbnb reservation was made.
+        </p>
+
+        <button
+          class="primary-btn"
+          onclick="closeModal()"
+        >
+          Done
+        </button>
+
+      </div>
+
+    </div>
+
+  `);
+}
+
+/* =========================================================
+   MODALS
+========================================================= */
+
+function showModal(html) {
+
+  $("#modalRoot").innerHTML = `
+    <div
+      class="modal-backdrop"
+      onclick="backdropClose(event)"
+    >
+      ${html}
+    </div>
+  `;
+
+  document.body.style.overflow = "hidden";
+}
+
+function closeModal() {
+  $("#modalRoot").innerHTML = "";
+  document.body.style.overflow = "";
+}
+
+function backdropClose(event) {
+  if(event.target.classList.contains("modal-backdrop"))
+    closeModal();
+}
+
+/* =========================================================
+   MENU
+========================================================= */
+
+function toggleMenu() {
+  $("#menu").classList.toggle("hidden");
+}
+
+/* =========================================================
+   INSPIRATION
+========================================================= */
+
+const inspiration = {
+
+  Popular:[
+    ["Nashville","Monthly Rentals"],
+    ["Madrid","Monthly Rentals"],
+    ["Portland","Monthly Rentals"],
+    ["Minneapolis","Monthly Rentals"],
+    ["Ocean City","House rentals"],
+    ["Charlotte","Monthly Rentals"],
+    ["Destin","Holiday rentals"],
+    ["Dublin","Apartment rentals"],
+    ["San Jose","House rentals"],
+    ["Dallas","Flat rentals"],
+    ["Cincinnati","Cabin rentals"],
+    ["Cleveland","Villa rentals"],
+    ["Corpus Christi","Flat rentals"],
+    ["St. Petersburg","Flat rentals"],
+    ["Philadelphia","Holiday rentals"],
+    ["Orange Beach","Flat rentals"],
+    ["Kauai","Flat rentals"]
+  ],
+
+  "Arts & culture":[
+    ["Florence","Art experiences"],
+    ["Paris","Museum stays"],
+    ["Rome","Historic homes"],
+    ["Kyoto","Cultural experiences"],
+    ["Jaipur","Heritage stays"],
+    ["Barcelona","Architecture tours"],
+    ["Vienna","Cultural stays"],
+    ["Prague","Historic apartments"],
+    ["Istanbul","Art and history"]
+  ],
+
+  Beach:[
+    ["Goa","Beach houses"],
+    ["Bali","Private villas"],
+    ["Maldives","Island stays"],
+    ["Phuket","Beachfront homes"],
+    ["Kovalam","Beach rentals"],
+    ["Santorini","Sea-view homes"],
+    ["Miami","Beach condos"],
+    ["Puducherry","Coastal stays"]
+  ],
+
+  Mountains:[
+    ["Manali","Mountain cabins"],
+    ["Munnar","Hill stays"],
+    ["Shimla","Mountain homes"],
+    ["Aspen","Ski chalets"],
+    ["Interlaken","Alpine stays"],
+    ["Ooty","Hill cottages"],
+    ["Coorg","Forest stays"],
+    ["Darjeeling","Mountain homes"]
+  ],
+
+  Outdoors:[
+    ["Rishikesh","Outdoor adventures"],
+    ["Wayanad","Nature stays"],
+    ["Ladakh","Adventure stays"],
+    ["Queenstown","Outdoor experiences"],
+    ["Banff","Nature cabins"],
+    ["Yosemite","Cabin rentals"],
+    ["Iceland","Nature stays"],
+    ["Nepal","Trekking experiences"]
+  ],
+
+  "Things to do":[
+    ["Tokyo","Food experiences"],
+    ["Dubai","Desert experiences"],
+    ["Bangkok","Cooking classes"],
+    ["Singapore","City experiences"],
+    ["Mumbai","Food tours"],
+    ["New Delhi","Historic walks"],
+    ["Bengaluru","Creative workshops"],
+    ["Goa","Water activities"]
+  ]
+};
+
+function renderInspiration() {
+
+  $("#inspirationTabs").innerHTML =
+    Object.keys(inspiration).map(key=>`
+
+      <button
+        class="inspiration-tab ${key===inspirationTab?"active":""}"
+        onclick="setInspirationTab('${key.replaceAll("'","\\'")}')"
+      >
+        ${key}
+      </button>
+
+    `).join("");
+
+  const items = inspiration[inspirationTab];
+
+  const visible =
+    inspirationExpanded
+      ? items
+      : items.slice(0,12);
+
+  $("#inspirationGrid").innerHTML =
+    visible.map(([name,type])=>`
+
+      <a class="inspiration-item" href="javascript:void(0)" onclick="destinationSearch('${name.replaceAll("'","\\'")}')">
+        <strong>${name}</strong>
+        <span>${type}</span>
+      </a>
+
+    `).join("");
+
+  $("#showMoreBtn").textContent =
+    inspirationExpanded
+      ? "Show less⌃"
+      : "Show more⌄";
+}
+
+function setInspirationTab(tab) {
+  inspirationTab = tab;
+  inspirationExpanded = false;
+  renderInspiration();
+}
+
+function toggleInspirationMore() {
+  inspirationExpanded = !inspirationExpanded;
+  renderInspiration();
+}
+
+/* =========================================================
+   UTILITY
+========================================================= */
+
+function toast(message) {
+
+  $("#toastRoot").innerHTML =
+    `<div class="toast">${message}</div>`;
+
+  setTimeout(()=>{
+    $("#toastRoot").innerHTML="";
+  },2400);
+}
+
+function goHome() {
+  activeCategory = "all";
+  renderCategories();
+  renderHome();
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function scrollToTopSearch() {
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+/* =========================================================
+   EVENTS
+========================================================= */
+
+document.addEventListener("click",event=>{
+
+  if(
+    activePopover &&
+    !event.target.closest("#searchBar")
+  ) {
+    closeSearchPopovers();
+  }
+
+  if(
+    !event.target.closest("#menu") &&
+    !event.target.closest(".nav-actions")
+  ) {
+    $("#menu")?.classList.add("hidden");
+  }
+});
+
+document.addEventListener("keydown",event=>{
+
+  if(event.key==="Escape") {
+
+    closeSearchPopovers();
+
+    $("#menu")?.classList.add("hidden");
+
+    if($("#modalRoot").innerHTML)
+      closeModal();
+  }
+});
+
+window.addEventListener("scroll",()=>{
+
+  const compact = $("#compactHeader");
+
+  if(window.scrollY > 115)
+    compact.classList.add("show");
+  else
+    compact.classList.remove("show");
+});
+
+/* =========================================================
+   INIT
+========================================================= */
+
+renderCategories();
+renderHome();
+renderInspiration();
+renderDestinationOptions();
+updateGuestSummary();
+updateDateSummary();
+
+</script>
+
+</body>
+</html>
